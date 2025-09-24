@@ -1,0 +1,59 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
+from sqlalchemy import Date, Integer, String
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy.sql import func
+
+from app.db.base import Base
+
+if TYPE_CHECKING:
+    from .base_stats import BaseStats
+    from .extended_stats import ExtendedStats
+    from .fights_results import FightsResults
+
+
+class Fighters(Base):
+    """Represents a fighter in the database.
+    Attributes:
+        fighter_id (int): Primary key, auto-incremented unique ID of the fighter.
+        name (str): First name of the fighter.
+        nickname (str): Nickname of the fighter.
+        surname (str): Last name (surname) of the fighter.
+        country (str): Country of origin.
+        weight_class (str): Weight division of the fighter.
+        wins (int): Total number of wins.
+        loss (int): Total number of losses.
+        draw (int): Total number of draws.
+        current_streak (int): Current winning or losing streak.
+        last_fight_date (date): Date of the fighter's last fight.
+        last_updated (date): Timestamp of the last update in the database.
+    """
+
+    __tablename__ = "fighters"
+    fighter_id: Mapped[int] = mapped_column(
+        Integer, primary_key=True, unique=True, nullable=False, autoincrement=True
+    )
+    name: Mapped[str] = mapped_column(String(50))
+    nickname: Mapped[str] = mapped_column(String(50))
+    surname: Mapped[str] = mapped_column(String(50))
+    country: Mapped[str] = mapped_column(String(50))
+    weight_class: Mapped[str] = mapped_column(String(50))
+    wins: Mapped[int] = mapped_column(Integer)
+    loss: Mapped[int] = mapped_column(Integer)
+    draw: Mapped[int] = mapped_column(Integer)
+    current_streak: Mapped[int] = mapped_column(Integer)
+    last_fight_date: Mapped[Date] = mapped_column(Date)
+    last_updated: Mapped[Date] = mapped_column(Date, default=func.now())
+
+    # relationships
+    base_stats: Mapped["BaseStats"] = relationship(
+        back_populates="fighter", uselist=False
+    )
+    extended_stats: Mapped["ExtendedStats"] = relationship(
+        back_populates="fighter", uselist=False
+    )
+    fight_results: Mapped["FightsResults"] = relationship(
+        back_populates="fighter", uselist=False
+    )

@@ -6,6 +6,9 @@ name = "pypi"
 [packages]
 fastapi = {version = "*"}
 uvicorn = "*"
+sqlalchemy = "*"
+psycopg2-binary = "*"
+pydantic = "*"
 
 [dev-packages]
 pytest = "*"
