@@ -20,3 +20,6 @@ class BaseStats(BaseModel):
     reach: float
     age: int
     last_updated: date
+
+    class Config:
+        orm_mode = True

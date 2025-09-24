@@ -26,3 +26,6 @@ class FightsResults(BaseModel):
     loss_by_dec: int
     non_contest: int
     last_updated: date
+
+    class Config:
+        orm_mode = True

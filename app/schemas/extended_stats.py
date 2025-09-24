@@ -30,3 +30,6 @@ class ExtendedStats(BaseModel):
     td_def: float
     sub_avg: float
     last_updated: date
+
+    class Config:
+        orm_mode = True

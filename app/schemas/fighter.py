@@ -32,3 +32,6 @@ class Fighter(BaseModel):
     current_streak: int
     last_fight_date: date
     last_updated: date
+
+    class Config:
+        orm_mode = True
