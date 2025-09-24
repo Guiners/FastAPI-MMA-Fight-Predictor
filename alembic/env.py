@@ -2,6 +2,13 @@ from logging.config import fileConfig
 
 from sqlalchemy import engine_from_config
 from sqlalchemy import pool
+from app.db.models.base import Base
+from app.db.database import DATABASE_URL
+from app.db.models.fighters import Fighters
+from app.db.models.base_stats import BaseStats
+from app.db.models.extended_stats import ExtendedStats
+from app.db.models.fights_results import FightsResults
+
 
 from alembic import context
 
@@ -18,7 +25,8 @@ if config.config_file_name is not None:
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-target_metadata = None
+target_metadata = Base.metadata
+config.set_main_option("sqlalchemy.url", DATABASE_URL)
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:

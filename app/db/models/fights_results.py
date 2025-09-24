@@ -6,7 +6,7 @@ from sqlalchemy import Date, ForeignKey, Integer
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import func
 
-from app.db.base import Base
+from app.db.models.base import Base
 
 if TYPE_CHECKING:
     from .fighters import Fighters
