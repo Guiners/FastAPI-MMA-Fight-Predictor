@@ -11,6 +11,8 @@ services:
       - db
     ports:
       - "8000:8000"
+    environment:
+      - PYTHONPATH=/app
 #    volumes:
 #      - ./:/app
 
@@ -33,10 +35,10 @@ services:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB}
-#    volumes:
-#      - ./postgres/data:/var/lib/postgresql/data
     volumes:
-      - ./postgres/data:/data
+      - ./postgres/data:/var/lib/postgresql/data
+#    volumes:
+#      - ./postgres/data:/data
     ports:
       - "5432:5432"
 
