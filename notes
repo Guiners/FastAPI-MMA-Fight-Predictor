@@ -10,3 +10,5 @@ docker exec -it db psql -U admin -d mma_db - z terminalu lacze sie do bazy
 
 docker exec -it app alembic revision --autogenerate -m "Initial tables" - odpalanie alembica
 
+docker exec -it app alembic upgrade head
+
