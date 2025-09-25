@@ -1,0 +1,30 @@
+[
+  {
+    "fighter_id": 1,
+    "weight": 93.0,
+    "height": 193.0,
+    "reach": 208.0,
+    "age": 36
+  },
+  {
+    "fighter_id": 2,
+    "weight": 70.0,
+    "height": 178.0,
+    "reach": 180.0,
+    "age": 33
+  },
+  {
+    "fighter_id": 3,
+    "weight": 84.0,
+    "height": 193.0,
+    "reach": 203.0,
+    "age": 35
+  },
+  {
+    "fighter_id": 4,
+    "weight": 120.0,
+    "height": 193.0,
+    "reach": 203.0,
+    "age": 41
+  }
+]

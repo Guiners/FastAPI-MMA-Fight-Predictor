@@ -1,0 +1,54 @@
+[
+  {
+    "fighter_id": 1,
+    "name": "Jon",
+    "nickname": "Bones",
+    "surname": "Jones",
+    "country": "USA",
+    "weight_class": "Light Heavyweight",
+    "wins": 26,
+    "loss": 1,
+    "draw": 0,
+    "current_streak": 2,
+    "last_fight_date": "2025-08-05"
+  },
+  {
+    "fighter_id": 2,
+    "name": "Khabib",
+    "nickname": "The Eagle",
+    "surname": "Nurmagomedov",
+    "country": "Russia",
+    "weight_class": "Lightweight",
+    "wins": 29,
+    "loss": 0,
+    "draw": 0,
+    "current_streak": 29,
+    "last_fight_date": "2020-10-24"
+  },
+  {
+    "fighter_id": 3,
+    "name": "Israel",
+    "nickname": "The Last Stylebender",
+    "surname": "Adesanya",
+    "country": "Nigeria",
+    "weight_class": "Middleweight",
+    "wins": 24,
+    "loss": 1,
+    "draw": 0,
+    "current_streak": 5,
+    "last_fight_date": "2025-07-12"
+  },
+  {
+    "fighter_id": 4,
+    "name": "Stipe",
+    "nickname": "Miocic",
+    "surname": "Miocic",
+    "country": "USA",
+    "weight_class": "Heavyweight",
+    "wins": 20,
+    "loss": 4,
+    "draw": 0,
+    "current_streak": 1,
+    "last_fight_date": "2025-05-15"
+  }
+]

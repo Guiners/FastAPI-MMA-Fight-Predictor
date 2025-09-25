@@ -1,0 +1,50 @@
+[
+  {
+    "fighter_id": 1,
+    "stance": "Orthodox",
+    "slpm": 5.5,
+    "str_acc": 55.0,
+    "sapm": 3.2,
+    "str_def": 60.0,
+    "td_avg": 2.1,
+    "td_acc": 45.0,
+    "td_def": 80.0,
+    "sub_avg": 0.4
+  },
+  {
+    "fighter_id": 2,
+    "stance": "Orthodox",
+    "slpm": 2.5,
+    "str_acc": 60.0,
+    "sapm": 1.0,
+    "str_def": 80.0,
+    "td_avg": 5.0,
+    "td_acc": 55.0,
+    "td_def": 90.0,
+    "sub_avg": 1.2
+  },
+  {
+    "fighter_id": 3,
+    "stance": "Switch",
+    "slpm": 6.0,
+    "str_acc": 60.0,
+    "sapm": 2.0,
+    "str_def": 70.0,
+    "td_avg": 1.0,
+    "td_acc": 40.0,
+    "td_def": 85.0,
+    "sub_avg": 0.5
+  },
+  {
+    "fighter_id": 4,
+    "stance": "Orthodox",
+    "slpm": 4.0,
+    "str_acc": 55.0,
+    "sapm": 3.0,
+    "str_def": 65.0,
+    "td_avg": 1.2,
+    "td_acc": 50.0,
+    "td_def": 80.0,
+    "sub_avg": 0.6
+  }
+]
