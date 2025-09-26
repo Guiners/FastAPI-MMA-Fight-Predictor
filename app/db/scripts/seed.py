@@ -1,4 +1,5 @@
 import json
+
 from app.db.database import get_db
 from sqlalchemy.orm import Session
 from pathlib import Path
@@ -25,7 +26,7 @@ class TableFiller:
                 database.add(table(**data))
 
     @staticmethod
-    def fill_database_with_data(database: Session, data_dict: str) -> None:
+    def fill_database_with_data(database: Session, data_dict: dict) -> None:
         """Populate all database tables defined in `example_data_paths`.
         This method iterates through the `example_data_paths` list and
         inserts the data into each corresponding table.
@@ -37,11 +38,14 @@ class TableFiller:
                     - ORM model class (table)
                     - Path to the JSON file with data.
         """
-        for table, path in data_dict:
-            TableFiller._fill_table_from_json(database, table, path)
-        database.commit()
+        for table, path in data_dict.items():
+            try:
+                TableFiller._fill_table_from_json(database, table, path)
+                database.commit()
+            except Exception as e:
+                print('Exception: ', e)
+                pass
 
 if __name__ == "__main__":
     mma_db = next(get_db())
-    print(type(mma_db))
     TableFiller.fill_database_with_data(mma_db, example_data_paths)
