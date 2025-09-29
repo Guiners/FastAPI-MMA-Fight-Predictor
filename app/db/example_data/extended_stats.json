@@ -1,6 +1,5 @@
 [
   {
-    "fighter_id": 1,
     "stance": "Orthodox",
     "slpm": 5.5,
     "str_acc": 55.0,
@@ -12,7 +11,6 @@
     "sub_avg": 0.4
   },
   {
-    "fighter_id": 2,
     "stance": "Orthodox",
     "slpm": 2.5,
     "str_acc": 60.0,
@@ -24,7 +22,6 @@
     "sub_avg": 1.2
   },
   {
-    "fighter_id": 3,
     "stance": "Switch",
     "slpm": 6.0,
     "str_acc": 60.0,
@@ -36,7 +33,6 @@
     "sub_avg": 0.5
   },
   {
-    "fighter_id": 4,
     "stance": "Orthodox",
     "slpm": 4.0,
     "str_acc": 55.0,

@@ -1,6 +1,5 @@
 [
   {
-    "fighter_id": 1,
     "name": "Jon",
     "nickname": "Bones",
     "surname": "Jones",
@@ -13,7 +12,6 @@
     "last_fight_date": "2025-08-05"
   },
   {
-    "fighter_id": 2,
     "name": "Khabib",
     "nickname": "The Eagle",
     "surname": "Nurmagomedov",
@@ -26,7 +24,6 @@
     "last_fight_date": "2020-10-24"
   },
   {
-    "fighter_id": 3,
     "name": "Israel",
     "nickname": "The Last Stylebender",
     "surname": "Adesanya",
@@ -39,7 +36,6 @@
     "last_fight_date": "2025-07-12"
   },
   {
-    "fighter_id": 4,
     "name": "Stipe",
     "nickname": "Miocic",
     "surname": "Miocic",

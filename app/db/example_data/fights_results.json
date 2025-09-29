@@ -1,6 +1,5 @@
 [
   {
-    "fighter_id": 1,
     "win_by_ko_tko": 10,
     "loss_by_ko_tko": 0,
     "win_by_sub": 6,
@@ -10,7 +9,6 @@
     "non_contest": 0
   },
   {
-    "fighter_id": 2,
     "win_by_ko_tko": 8,
     "loss_by_ko_tko": 0,
     "win_by_sub": 11,
@@ -20,7 +18,6 @@
     "non_contest": 0
   },
   {
-    "fighter_id": 3,
     "win_by_ko_tko": 14,
     "loss_by_ko_tko": 0,
     "win_by_sub": 0,
@@ -30,7 +27,6 @@
     "non_contest": 0
   },
   {
-    "fighter_id": 4,
     "win_by_ko_tko": 15,
     "loss_by_ko_tko": 2,
     "win_by_sub": 1,
