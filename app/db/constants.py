@@ -7,5 +7,5 @@ example_data_paths = {
     Fighters: "./app/db/example_data/fighters.json",
     BaseStats: "./app/db/example_data/base_stats.json",
     ExtendedStats: "./app/db/example_data/extended_stats.json",
-    FightsResults: "./app/db/example_data/fights_results.json"
+    FightsResults: "./app/db/example_data/fights_results.json",
 }

@@ -1,4 +1,4 @@
-from fights_results import FightsResults
+from .fights_results import FightsResults
 
 from .base_stats import BaseStats
 from .extended_stats import ExtendedStats
