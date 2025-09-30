@@ -19,7 +19,7 @@ class BaseStats(Base):
         fighter_id (int): Primary key and foreign key to Fighters.fighter_id.
         weight (int): Weight of the fighter in kilograms.
         height (int): Height of the fighter in centimeters.
-        reach (int): Reach of the fighter in centimeters.
+        reach (int): Reach of the fighter in centimeters
         age (int): Age of the fighter in years.
         last_updated (date): Date when the record was last updated.
         fighter (Fighters): ORM relationship to the main Fighter record.
