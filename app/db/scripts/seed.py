@@ -62,18 +62,22 @@ class TableFiller:
                     - ORM model class (table)
                     - Path to the JSON file with data.
         """
-        for table, path in data_dict.items():
-            try:
+        try:
+            for table, path in data_dict.items():
                 TableFiller._fill_table_from_json(db, table, path)
-                await db.commit()
+            await db.commit()
+            print("Database seeded successfully. Verifying data...")
+            for table in data_dict.keys():
                 result = await db.execute(select(table))
-                table = result.scalars().all()
-                for row in table:
+                rows = result.scalars().all()
+                print(f"--- Contents of {table.__name__} ---")
+                for row in rows:
                     print(vars(row))
 
-            except Exception as e:
-                print('Exception: ', e)
-                pass
+        except Exception as e:
+            print(f'An error occurred during database seeding: {e}')
+            await db.rollback()
+            raise
 
 
 async def main():
