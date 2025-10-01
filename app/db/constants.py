@@ -1,6 +1,6 @@
-from app.db.models.fighters import Fighters
 from app.db.models.base_stats import BaseStats
 from app.db.models.extended_stats import ExtendedStats
+from app.db.models.fighters import Fighters
 from app.db.models.fights_results import FightsResults
 
 example_data_paths = {

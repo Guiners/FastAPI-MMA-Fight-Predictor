@@ -46,5 +46,5 @@ class FightsResults(Base):
 
     # relationships
     fighter: Mapped["Fighters"] = relationship(
-        back_populates="fight_results", uselist=False
+        back_populates="fights_results", uselist=False
     )

@@ -1,13 +1,13 @@
 import asyncio
 import json
 from datetime import datetime
+from pathlib import Path
 
 from sqlalchemy import select
-
-from app.db.database import get_db
 from sqlalchemy.ext.asyncio import AsyncSession
-from pathlib import Path
+
 from app.db.constants import example_data_paths
+from app.db.database import get_db
 
 LAST_FIGHT_DATE = "last_fight_date"
 LAST_UPDATED = "last_updated"
