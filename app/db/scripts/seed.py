@@ -3,11 +3,11 @@ import json
 from datetime import datetime
 from pathlib import Path
 
-from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db.constants import example_data_paths
 from app.db.database import get_db
+from app.utils.logger import logger
 
 LAST_FIGHT_DATE = "last_fight_date"
 LAST_UPDATED = "last_updated"
@@ -30,7 +30,7 @@ class TableFiller:
             raise FileNotFoundError(f"JSON file not found: {json_path}")
 
         with path.open(encoding="utf-8") as file:
-            print("Updating table:", table)
+            logger.info(f"Updating table:{table}")
             for data in json.load(file):
                 TableFiller.fix_data_column(data, LAST_FIGHT_DATE)
                 TableFiller.fix_data_column(data, LAST_UPDATED)
@@ -53,12 +53,10 @@ class TableFiller:
             for table, path in data_dict.items():
                 TableFiller._fill_table_from_json(db, table, path)
             await db.commit()
-
-            # todo here we have printing all tables with all data might by handy for the future
-            print("Database seeded successfully. Verifying data...")
+            logger.info("Database seeded successfully")
 
         except Exception as e:
-            print(f"An error occurred during database seeding: {e}")
+            logger.error(f"An error occurred during database seeding: {e}")
             await db.rollback()
             raise
 
