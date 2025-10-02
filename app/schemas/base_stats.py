@@ -1,4 +1,5 @@
 from datetime import date
+from typing import Optional
 
 from pydantic import BaseModel
 
@@ -14,11 +15,11 @@ class BaseStats(BaseModel):
         last_updated (date): Date when the record was last updated.
     """
 
-    fighter_id: int
-    weight: float
-    height: float
-    reach: float
-    age: int
+    fighter_id: Optional[int] = None
+    weight: Optional[float] = None
+    height: Optional[float] = None
+    reach: Optional[float] = None
+    age: Optional[int] = None
     last_updated: date
 
     class Config:
