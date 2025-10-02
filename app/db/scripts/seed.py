@@ -7,7 +7,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db.constants import example_data_paths
 from app.db.database import get_db
-from app.utils.logger import logger
+from app.tools.logger import logger
 
 LAST_FIGHT_DATE = "last_fight_date"
 LAST_UPDATED = "last_updated"

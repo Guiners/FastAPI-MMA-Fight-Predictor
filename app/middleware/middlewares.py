@@ -1,8 +1,8 @@
 import time
 
-from fastapi import Request
+from fastapi import HTTPException, Request
 
-from app.utils.logger import logger
+from app.tools.logger import logger
 
 
 async def log_requests(request: Request, call_next):

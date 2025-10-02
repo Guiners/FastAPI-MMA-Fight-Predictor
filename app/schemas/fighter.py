@@ -1,6 +1,7 @@
 from datetime import date
+from typing import Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, create_model
 
 
 class Fighter(BaseModel):
@@ -35,3 +36,12 @@ class Fighter(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+FighterFilter = create_model(
+    "FighterFilter",
+    **{
+        field: (Optional[typ.annotation], None)
+        for field, typ in Fighter.model_fields.items()
+    }
+)
