@@ -35,16 +35,16 @@ class Fighters(Base):
     fighter_id: Mapped[int] = mapped_column(
         Integer, primary_key=True, unique=True, nullable=False, autoincrement=True
     )
-    name: Mapped[str] = mapped_column(String(50))
-    nickname: Mapped[str] = mapped_column(String(50))
-    surname: Mapped[str] = mapped_column(String(50))
-    country: Mapped[str] = mapped_column(String(50))
-    weight_class: Mapped[str] = mapped_column(String(50))
-    wins: Mapped[int] = mapped_column(Integer)
-    loss: Mapped[int] = mapped_column(Integer)
-    draw: Mapped[int] = mapped_column(Integer)
-    current_streak: Mapped[int] = mapped_column(Integer)
-    last_fight_date: Mapped[Date] = mapped_column(Date)
+    name: Mapped[str] = mapped_column(String(50), nullable=True)
+    nickname: Mapped[str] = mapped_column(String(50), nullable=True)
+    surname: Mapped[str] = mapped_column(String(50), nullable=True)
+    country: Mapped[str] = mapped_column(String(50), nullable=True)
+    weight_class: Mapped[str] = mapped_column(String(50), nullable=True)
+    wins: Mapped[int] = mapped_column(Integer, nullable=True)
+    loss: Mapped[int] = mapped_column(Integer, nullable=True)
+    draw: Mapped[int] = mapped_column(Integer, nullable=True)
+    current_streak: Mapped[int] = mapped_column(Integer, nullable=True)
+    last_fight_date: Mapped[Date] = mapped_column(Date, nullable=True)
     last_updated: Mapped[Date] = mapped_column(Date, default=func.now())
 
     # relationships

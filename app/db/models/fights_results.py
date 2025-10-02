@@ -35,13 +35,13 @@ class FightsResults(Base):
         unique=True,
         nullable=False,
     )
-    win_by_ko_tko: Mapped[int] = mapped_column(Integer)
-    loss_by_ko_tko: Mapped[int] = mapped_column(Integer)
-    win_by_sub: Mapped[int] = mapped_column(Integer)
-    loss_by_sub: Mapped[int] = mapped_column(Integer)
-    win_by_dec: Mapped[int] = mapped_column(Integer)
-    loss_by_dec: Mapped[int] = mapped_column(Integer)
-    non_contest: Mapped[int] = mapped_column(Integer)
+    win_by_ko_tko: Mapped[int] = mapped_column(Integer, nullable=True)
+    loss_by_ko_tko: Mapped[int] = mapped_column(Integer, nullable=True)
+    win_by_sub: Mapped[int] = mapped_column(Integer, nullable=True)
+    loss_by_sub: Mapped[int] = mapped_column(Integer, nullable=True)
+    win_by_dec: Mapped[int] = mapped_column(Integer, nullable=True)
+    loss_by_dec: Mapped[int] = mapped_column(Integer, nullable=True)
+    non_contest: Mapped[int] = mapped_column(Integer, nullable=True)
     last_updated: Mapped[Date] = mapped_column(Date, default=func.now())
 
     # relationships

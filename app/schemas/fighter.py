@@ -43,5 +43,6 @@ FighterFilter = create_model(
     **{
         field: (Optional[typ.annotation], None)
         for field, typ in Fighter.model_fields.items()
+        if field not in ("fighter_id", "last_updated")
     }
 )

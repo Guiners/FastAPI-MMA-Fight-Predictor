@@ -25,6 +25,9 @@ async def root():
     return {"message": "Hello World"}
 
 
+#######################################GET METHODS#############################################
+
+
 @app.get("/all_fighters")
 @handle_empty_response
 async def get_all_fighters_list(
@@ -77,3 +80,13 @@ async def search_fighters(
     return await DatabaseManager(
         db
     ).get_all_available_fighter_statistics_by_own_parameters(fighter_filters)
+
+
+#######################################POST METHODS#############################################
+
+
+@app.post("/create_base_fighter")
+async def create_base_fighter(
+    fighter_data: FighterFilter = Depends(), db: AsyncSession = Depends(get_db)
+):
+    return await DatabaseManager(db).post_single_base_data_to_database(fighter_data)
