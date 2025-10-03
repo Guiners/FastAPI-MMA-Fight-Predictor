@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from typing import Optional
 
 from pydantic import create_model
@@ -9,9 +11,9 @@ from .fights_results import FightsResults
 
 
 class ExtendedFighter(Fighter):
-    base_stats: Optional[BaseStats] = None
-    extended_stats: Optional[ExtendedStats] = None
-    fights_results: Optional[FightsResults] = None
+    base_stats: BaseStats | None = None
+    extended_stats: ExtendedStats | None = None
+    fights_results: FightsResults | None = None
 
     class Config:
         from_attributes = True
@@ -23,5 +25,5 @@ ExtendedFighterFilter = create_model(
         field: (Optional[typ.annotation], None)
         for field, typ in ExtendedFighter.model_fields.items()
         if field != "fighter_id" or "last_updated"
-    }
+    },
 )

@@ -1,6 +1,6 @@
 from typing import List, Union
 
-from sqlalchemy import insert, select, text
+from sqlalchemy import insert, select, text, CursorResult
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import joinedload
 
@@ -115,14 +115,14 @@ class DatabaseManager:
 
     #######################################POST METHODS#############################################
 
-    async def post_single_base_data_to_database(self, data: FighterFilter) -> None:
-        data_to_add = data.dict(exclude_none=True)
-        stmt = insert(Fighters).values(**data_to_add)
+    async def post_single_base_data_to_database(
+        self, data: FighterFilter
+    ) -> CursorResult:
+        stmt = insert(Fighters).values(**data)
         result = await self.db.execute(stmt)
         logger.critical(f"post_single_base_data_to_database {result}")
         await self.db.commit()
         return result
-        # results = await self.db.execute(select(table).where(column_attr == value))
 
     # async def post_extended_base_data_to_database(
     #     self, data: Union[FighterFilter, ExtendedFighterFilter], extended: bool = False

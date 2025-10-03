@@ -89,4 +89,18 @@ async def search_fighters(
 async def create_base_fighter(
     fighter_data: FighterFilter = Depends(), db: AsyncSession = Depends(get_db)
 ):
-    return await DatabaseManager(db).post_single_base_data_to_database(fighter_data)
+    data_to_add = fighter_data.dict(exclude_none=True)
+    return await DatabaseManager(db).post_single_base_data_to_database(data_to_add)
+
+
+@app.post("/create_multiple_base_fighter")
+async def create_multiple_base_fighter(
+    fighters_data: List[FighterFilter], db: AsyncSession = Depends(get_db)
+):
+    db_responses = []
+    for fighter_data in fighters_data:
+        fighter = fighter_data.dict(exclude_none=True)
+        response = await DatabaseManager(db).post_single_base_data_to_database(fighter)
+        db_responses.append(response)
+
+    return db_responses
