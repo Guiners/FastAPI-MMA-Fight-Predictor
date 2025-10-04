@@ -10,7 +10,7 @@ from app.db.models.fighters import Fighters
 from app.db.models.fights_results import FightsResults
 from app.db.scripts.database_manager import DatabaseManager
 from app.middleware.middlewares import log_requests
-from app.schemas.extended_fighter import ExtendedFighter
+from app.schemas.extended_fighter import ExtendedFighter, ExtendedFighterFilter
 from app.schemas.fighter import Fighter as FighterSchema
 from app.schemas.fighter import FighterFilter
 from app.tools.tools import handle_empty_response
@@ -104,3 +104,11 @@ async def create_multiple_base_fighter(
         db_responses.append(response)
 
     return db_responses
+
+
+@app.post("/create_extended_fighter")
+async def create_extended_fighter(
+    fighter_data: ExtendedFighter = Depends(), db: AsyncSession = Depends(get_db)
+):
+    data_to_add = fighter_data.dict(exclude_none=True)
+    return await DatabaseManager(db).post_single_base_data_to_database(data_to_add)

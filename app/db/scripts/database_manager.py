@@ -124,6 +124,16 @@ class DatabaseManager:
         await self.db.commit()
         return result
 
+
+    async def post_single_extended_data_to_database(
+        self, data: ExtendedFighterFilter
+    ) -> CursorResult:
+        stmt = insert(Fighters).values(**data)
+        result = await self.db.execute(stmt)
+        logger.critical(f"post_single_base_data_to_database {result}")
+        await self.db.commit()
+        return result
+
     # async def post_extended_base_data_to_database(
     #     self, data: Union[FighterFilter, ExtendedFighterFilter], extended: bool = False
     # ) -> None:

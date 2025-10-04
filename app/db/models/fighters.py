@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from sqlalchemy import Date, Integer, String
+from sqlalchemy import Date, Integer, String, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import func
 
@@ -56,4 +56,8 @@ class Fighters(Base):
     )
     fights_results: Mapped["FightsResults"] = relationship(
         back_populates="fighter", uselist=False
+    )
+
+    __table_args__ = (
+        UniqueConstraint("name", "nickname", "surname", name="uq_name_nickname_surname"),
     )
