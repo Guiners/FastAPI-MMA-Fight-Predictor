@@ -1,0 +1,24 @@
+[
+  {
+    "name": "Jan",
+    "surname": "Błachowicz",
+    "nickname": "Cieszyński Książę",
+    "country": "Poland",
+    "weight_class": "Light Heavyweight",
+    "wins": 29,
+    "loss": 10,
+    "draw": 1,
+    "current_streak": -1
+  },
+  {
+    "name": "Mateusz",
+    "surname": "Gamrot",
+    "nickname": "Gamer",
+    "country": "Poland",
+    "weight_class": "Lightweight",
+    "wins": 23,
+    "loss": 2,
+    "draw": 0,
+    "current_streak": 2
+  }
+]

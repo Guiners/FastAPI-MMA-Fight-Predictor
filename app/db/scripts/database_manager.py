@@ -1,10 +1,10 @@
 from typing import List, Union
 
-from sqlalchemy import insert, select, text, CursorResult
+from sqlalchemy import insert, select, text, CursorResult, delete
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import joinedload
 
-from app.db.models import Base
+from app.db.models import Base, ExtendedStats, BaseStats, FightsResults
 from app.db.models.fighters import Fighters
 from app.schemas import ExtendedFighter as ExtendedFighterSchema
 from app.schemas.extended_fighter import ExtendedFighterFilter
@@ -41,12 +41,11 @@ class DatabaseManager:
         column_attr = getattr(table, column)
 
         if extended:
-            results = await self.db.execute(
+            return await self.db.execute(
                 self.extended_fighter_stmt.where(column_attr == value)
             )
         else:
-            results = await self.db.execute(select(table).where(column_attr == value))
-        return results
+            return await self.db.execute(select(table).where(column_attr == value))
 
     @staticmethod
     def build_filters_from_model(_filters: FighterFilter, table=Fighters):
@@ -92,6 +91,31 @@ class DatabaseManager:
             return None
         return [FighterSchema.model_validate(fighter) for fighter in fighters]
 
+
+    async def get_fighter_id_by_name_nickname_surname(
+        self, name: str, nickname: str, surname: str
+    ) -> int:
+
+        stmt = select(Fighters).where(
+            Fighters.name == name,
+            Fighters.nickname == nickname,
+            Fighters.surname == surname
+        )
+        record = await self.db.execute(stmt)
+        result = record.scalars().first()
+        fighter = FighterSchema.model_validate(result)
+
+        return fighter.fighter_id
+
+        # records = await self._get_records_from_table_with_column_and_value(
+        #     Fighters, "country", country
+        # )
+        # fighters = records.scalars().all()
+        # if fighters is None:
+        #     return None
+        # return [FighterSchema.model_validate(fighter) for fighter in fighters]
+
+
     async def get_all_available_fighter_statistics_by_country(
         self, country: str
     ) -> Union[list[ExtendedFighterSchema], None]:
@@ -115,57 +139,53 @@ class DatabaseManager:
 
     #######################################POST METHODS#############################################
 
+    # async def post_single_base_data_to_database(
+    #     self, data: FighterFilter
+    # ) -> CursorResult:
+    #     stmt = insert(Fighters).values(**data)
+    #     result = await self.db.execute(stmt)
+    #     await self.db.commit()
+    #     return result
+
     async def post_single_base_data_to_database(
         self, data: FighterFilter
-    ) -> CursorResult:
-        stmt = insert(Fighters).values(**data)
-        result = await self.db.execute(stmt)
-        logger.critical(f"post_single_base_data_to_database {result}")
+    ) -> bool:
+        self.db.add(Fighters(**data))
         await self.db.commit()
-        return result
-
+        return True
+        # return result
 
     async def post_single_extended_data_to_database(
-        self, data: ExtendedFighterFilter
-    ) -> CursorResult:
-        stmt = insert(Fighters).values(**data)
-        result = await self.db.execute(stmt)
-        logger.critical(f"post_single_base_data_to_database {result}")
+        self, data: dict
+    ):
+        data['base_stats'] = BaseStats(**data["base_stats"])
+        data['extended_stats'] = ExtendedStats(**data["extended_stats"])
+        data['fights_results'] = FightsResults(**data["fights_results"])
+        fighter = Fighters(**data)
+        self.db.add(fighter)
         await self.db.commit()
-        return result
 
-    # async def post_extended_base_data_to_database(
-    #     self, data: Union[FighterFilter, ExtendedFighterFilter], extended: bool = False
-    # ) -> None:
-    #     data_dict = data.dict(exclude_none=True)
-    #     fighter_data = []#todo dokonczyc
-    #
-    #     for field, value in data_dict.items():
-    #         if hasattr(Fighters, field):  #czy to sprawdzi rowniez w relacjach tego modelu?
-    #             column = getattr(Fighters, field)
-    #             fighter_data.append(column == value)
-    #         else:
-    #             raise ValueError(f"Column '{field}' does not exist in Fighters model")
-    #
-    #
-    # async def post_multiple_data_to_database(
-    #         self, data: List[Union[FighterFilter, ExtendedFighterFilter]], extended: bool = False
-    # ) -> None:
-    #     fighters = [] #todo dokonczyc
-    #     for fighter_data in data:
-    #         data_dict = data.dict(exclude_none=True)
-    #         for field, value in data_dict.items():
-    #             if hasattr(Fighters, field):
-    #                 column = getattr(Fighters, field)
-    #                 fighters.append(column == value)
-    #             else:
-    #                 raise ValueError(f"Column '{field}' does not exist in Fighters model")
 
-    # records = await self._get_all_fighter_statistics_with_dict(filters)
-    # fighters = records.scalars().all()
-    # if fighters is None:
-    #     return None
-    # return [ExtendedFighter.model_validate(fighter) for fighter in fighters]
+
+    #######################################PUT METHODS#############################################
+
+    async def update_base_fighter(
+        self, fighter_id: int, data: dict
+    ) -> Union[FighterSchema, None]:
+        ...
+        #todo dokonczyc
+        # if fighter is None:
+        #     return None
+        # return FighterSchema.model_validate(fighter)
+
+    #######################################DELETE METHODS#############################################
+
+
+    async def remove_record_by_fighter_id(self, fighter_id: int):
+        stmt = delete(Fighters).where(Fighters.fighter_id == fighter_id)
+        await self.db.execute(stmt)
+        await self.db.commit()
+        return True
 
     #####################################OTHER METHODS#############################################
     async def clear_all_tables(self) -> None:

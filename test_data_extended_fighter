@@ -1,0 +1,201 @@
+{
+  "name": "Tom",
+  "nickname": "",
+  "surname": "Aspinall",
+  "country": "United Kingdom",
+  "weight_class": "Heavyweight",
+  "wins": 14,
+  "loss": 3,
+  "draw": 0,
+  "current_streak": 2,
+  "last_fight_date": "2024-11-09",
+  "last_updated": "2025-10-06",
+  "base_stats": {
+    "weight": 113,
+    "height": 196,
+    "reach": 198,
+    "age": 31,
+  },
+  "extended_stats": {
+    "stance": "Orthodox",
+    "slpm": 7.6,
+    "str_acc": 66,
+    "sapm": 2.7,
+    "str_def": 65,
+    "td_avg": 4.0,
+    "td_acc": 100,
+    "td_def": 75,
+    "sub_avg": 1.0,
+  },
+  "fights_results": {
+    "win_by_ko_tko": 10,
+    "loss_by_ko_tko": 1,
+    "win_by_sub": 3,
+    "loss_by_sub": 0,
+    "win_by_dec": 1,
+    "loss_by_dec": 2,
+    "non_contest": 0,
+  }
+}
+
+
+{
+  "name": "Charles",
+  "nickname": "Do Bronx",
+  "surname": "Oliveira",
+  "country": "Brazil",
+  "weight_class": "Lightweight",
+  "wins": 34,
+  "loss": 9,
+  "draw": 0,
+  "current_streak": 1,
+  "last_fight_date": "2024-06-01",
+  "base_stats": {
+    "weight": 70,
+    "height": 178,
+    "reach": 188,
+    "age": 35
+  },
+  "extended_stats": {
+    "stance": "Orthodox",
+    "slpm": 3.5,
+    "str_acc": 53,
+    "sapm": 3.1,
+    "str_def": 54,
+    "td_avg": 2.5,
+    "td_acc": 40,
+    "td_def": 57,
+    "sub_avg": 2.8
+  },
+  "fights_results": {
+    "win_by_ko_tko": 10,
+    "loss_by_ko_tko": 4,
+    "win_by_sub": 21,
+    "loss_by_sub": 4,
+    "win_by_dec": 3,
+    "loss_by_dec": 1,
+    "non_contest": 0
+  }
+}
+
+
+
+[
+  {
+    "name": "Michael",
+    "nickname": "Iron",
+    "surname": "Chandler",
+    "country": "United States",
+    "weight_class": "Lightweight",
+    "wins": 25,
+    "loss": 7,
+    "draw": 0,
+    "current_streak": 1,
+    "last_fight_date": "2024-06-10",
+    "last_updated": "2025-10-06",
+    "base_stats": {
+      "weight": 70,
+      "height": 178,
+      "reach": 178,
+      "age": 37
+    },
+    "extended_stats": {
+      "stance": "Orthodox",
+      "slpm": 5.8,
+      "str_acc": 60,
+      "sapm": 3.0,
+      "str_def": 58,
+      "td_avg": 1.2,
+      "td_acc": 40,
+      "td_def": 50,
+      "sub_avg": 0.5
+    },
+    "fights_results": {
+      "win_by_ko_tko": 14,
+      "loss_by_ko_tko": 2,
+      "win_by_sub": 5,
+      "loss_by_sub": 1,
+      "win_by_dec": 6,
+      "loss_by_dec": 4,
+      "non_contest": 0
+    }
+  },
+  {
+    "name": "Leon",
+    "nickname": "Rocky",
+    "surname": "Edwards",
+    "country": "United Kingdom",
+    "weight_class": "Welterweight",
+    "wins": 20,
+    "loss": 2,
+    "draw": 0,
+    "current_streak": 5,
+    "last_fight_date": "2024-09-20",
+    "last_updated": "2025-10-06",
+    "base_stats": {
+      "weight": 77,
+      "height": 180,
+      "reach": 183,
+      "age": 34
+    },
+    "extended_stats": {
+      "stance": "Orthodox",
+      "slpm": 4.5,
+      "str_acc": 62,
+      "sapm": 2.8,
+      "str_def": 64,
+      "td_avg": 1.0,
+      "td_acc": 45,
+      "td_def": 55,
+      "sub_avg": 0.2
+    },
+    "fights_results": {
+      "win_by_ko_tko": 8,
+      "loss_by_ko_tko": 0,
+      "win_by_sub": 4,
+      "loss_by_sub": 1,
+      "win_by_dec": 8,
+      "loss_by_dec": 1,
+      "non_contest": 0
+    }
+  },
+  {
+    "name": "Merab",
+    "nickname": "Georgian",
+    "surname": "Dvalishvili",
+    "country": "Georgia",
+    "weight_class": "Bantamweight",
+    "wins": 17,
+    "loss": 4,
+    "draw": 0,
+    "current_streak": 3,
+    "last_fight_date": "2024-08-15",
+    "last_updated": "2025-10-06",
+    "base_stats": {
+      "weight": 61,
+      "height": 170,
+      "reach": 173,
+      "age": 33
+    },
+    "extended_stats": {
+      "stance": "Orthodox",
+      "slpm": 7.0,
+      "str_acc": 65,
+      "sapm": 3.5,
+      "str_def": 60,
+      "td_avg": 3.0,
+      "td_acc": 55,
+      "td_def": 70,
+      "sub_avg": 0.1
+    },
+    "fights_results": {
+      "win_by_ko_tko": 5,
+      "loss_by_ko_tko": 1,
+      "win_by_sub": 3,
+      "loss_by_sub": 0,
+      "win_by_dec": 9,
+      "loss_by_dec": 3,
+      "non_contest": 0
+    }
+  }
+]

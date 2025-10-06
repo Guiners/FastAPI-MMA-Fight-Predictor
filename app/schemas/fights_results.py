@@ -3,6 +3,8 @@ from typing import Optional
 
 from pydantic import BaseModel
 
+from app.tools.tools import create_filter_schema
+
 
 class FightsResults(BaseModel):
     """Aggregated fight results for a fighter.
@@ -30,3 +32,5 @@ class FightsResults(BaseModel):
 
     class Config:
         from_attributes = True
+
+FightsResultsFilter = create_filter_schema(FightsResults)

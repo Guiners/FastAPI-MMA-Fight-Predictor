@@ -3,6 +3,8 @@ from typing import Optional
 
 from pydantic import BaseModel
 
+from app.tools.tools import create_filter_schema
+
 
 class ExtendedStats(BaseModel):
     """Extended statistical information for a fighter.
@@ -34,3 +36,6 @@ class ExtendedStats(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+ExtendedStatsFilter = create_filter_schema(ExtendedStats)

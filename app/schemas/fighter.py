@@ -3,6 +3,8 @@ from typing import Optional
 
 from pydantic import BaseModel, create_model
 
+from app.tools.tools import create_filter_schema
+
 
 class Fighter(BaseModel):
     """Main information about a fighter.
@@ -38,11 +40,5 @@ class Fighter(BaseModel):
         from_attributes = True
 
 
-FighterFilter = create_model(
-    "FighterFilter",
-    **{
-        field: (Optional[typ.annotation], None)
-        for field, typ in Fighter.model_fields.items()
-        if field not in ("fighter_id", "last_updated")
-    }
-)
+FighterFilter = create_filter_schema(Fighter)
+

@@ -1,7 +1,9 @@
 from datetime import date
 from typing import Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, create_model
+
+from app.tools.tools import create_filter_schema
 
 
 class BaseStats(BaseModel):
@@ -24,3 +26,5 @@ class BaseStats(BaseModel):
 
     class Config:
         from_attributes = True
+
+BaseStatsFilter = create_filter_schema(BaseStats)
