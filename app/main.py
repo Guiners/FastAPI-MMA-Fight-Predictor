@@ -54,10 +54,15 @@ async def get_fighters_data_by_country(
 
 @app.get("/fighter/{name}/{nickname}/{surname}")
 @handle_empty_response
-async def get_fighter_id_by_name_nickname_surname(
-    name: str, nickname: str, surname:str, db: AsyncSession = Depends(get_db)
-) -> int:
-    return await DatabaseManager(db).get_fighter_id_by_name_nickname_surname(name, nickname, surname)
+async def get_fighter_by_name_nickname_surname(
+    name: str, nickname: str, surname: str, db: AsyncSession = Depends(get_db)
+) -> FighterSchema:
+    record = await DatabaseManager(db).get_fighter_by_name_nickname_surname(
+        name, nickname, surname
+    )
+    result = record.scalars().first()
+    fighter = FighterSchema.model_validate(result)
+    return fighter
 
 
 @app.get("/extended_fighter_stats/id/{fighter_id}")
@@ -129,42 +134,81 @@ async def create_multiple_extended_fighter(
     db_responses = []
     for fighter_data in fighters_data:
         fighter = fighter_data.dict(exclude_none=True)
-        response = await DatabaseManager(db).post_single_extended_data_to_database(fighter)
+        response = await DatabaseManager(db).post_single_extended_data_to_database(
+            fighter
+        )
         db_responses.append(response)
 
     return db_responses
 
+
 #######################################PUT METHODS#############################################
 
+
 @app.put("/update_base_fighter/{fighter_id}")
-async def update_base_fighter(
-    fighter_id: int, fighter_data: FighterFilter = Depends(), db: AsyncSession = Depends(get_db)
-    ):
-    #todo dokonczyc
+async def update_base_fighter_by_id(
+    fighter_id: int,
+    fighter_data: FighterFilter = Depends(),
+    db: AsyncSession = Depends(get_db),
+):
     data_to_add = fighter_data.dict(exclude_none=True)
-    database = DatabaseManager(db)
-    fighter = await database.get_data_by_fighter_id(Fighters, fighter_id)
-
-    return await database.update_base_fighter(fighter_id, data_to_add)
+    return await DatabaseManager(db).update_base_fighter_by_id(fighter_id, data_to_add)
 
 
+@app.put("/update_base_fighter/{name}/{nickname}/{surname}")
+async def update_base_fighter_by_name(
+    name: str,
+    nickname: str,
+    surname: str,
+    fighter_data: FighterFilter = Depends(),
+    db: AsyncSession = Depends(get_db),
+):
+    data_to_add = fighter_data.dict(exclude_none=True)
+    return await DatabaseManager(db).update_base_fighter_name_nickname_surname(
+        name, nickname, surname, data_to_add
+    )
+
+
+@app.put("/update_extended_fighter/{fighter_id}")
+async def update_extended_fighter_by_id(
+    fighter_id: int,
+    fighter_data: ExtendedFighterFilter,
+    db: AsyncSession = Depends(get_db),
+):
+    data_to_add = fighter_data.dict(exclude_none=True)
+    return await DatabaseManager(db).update_extender_fighter_by_id(
+        fighter_id, data_to_add
+    )
+
+
+@app.put("/update_extended_fighter/{name}/{nickname}/{surname}")
+async def update_extended_fighter_by_name(
+    name: str,
+    nickname: str,
+    surname: str,
+    fighter_data: ExtendedFighterFilter,
+    db: AsyncSession = Depends(get_db),
+):
+    data_to_add = fighter_data.dict(exclude_none=True)
+    return await DatabaseManager(db).update_extender_fighter_name_nickname_surname(
+        name, nickname, surname, data_to_add
+    )
 
 
 #######################################DELETE METHODS#############################################
 
+
 @app.delete("/delete_fighter/{fighter_id}")
 @handle_empty_response
-async def update_base_fighter(
-    fighter_id: int, db: AsyncSession = Depends(get_db)
-    ):
+async def update_base_fighter(fighter_id: int, db: AsyncSession = Depends(get_db)):
     return await DatabaseManager(db).remove_record_by_fighter_id(fighter_id)
 
 
 @app.delete("/delete_multiple_fighter")
 @handle_empty_response
-async def update_base_fighter(
+async def update_base_fighter_by_id(
     list_of_ids: List[int] = Query, db: AsyncSession = Depends(get_db)
-    ):
+):
     db_responses = []
 
     for fighter_id in list_of_ids:
@@ -172,4 +216,3 @@ async def update_base_fighter(
         db_responses.append(response)
 
     return db_responses
-

@@ -33,4 +33,5 @@ class FightsResults(BaseModel):
     class Config:
         from_attributes = True
 
+
 FightsResultsFilter = create_filter_schema(FightsResults)

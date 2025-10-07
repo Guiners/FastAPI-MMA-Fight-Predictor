@@ -15,8 +15,6 @@ class ExtendedFighter(Fighter):
         from_attributes = True
 
 
-
-
 class ExtendedFighterFilter(FighterFilter):
     base_stats: BaseStatsFilter | None = None
     extended_stats: ExtendedStatsFilter | None = None

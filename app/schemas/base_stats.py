@@ -27,4 +27,5 @@ class BaseStats(BaseModel):
     class Config:
         from_attributes = True
 
+
 BaseStatsFilter = create_filter_schema(BaseStats)

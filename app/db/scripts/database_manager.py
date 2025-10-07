@@ -1,10 +1,10 @@
 from typing import List, Union
 
-from sqlalchemy import insert, select, text, CursorResult, delete
+from sqlalchemy import CursorResult, delete, insert, select, text
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import joinedload
 
-from app.db.models import Base, ExtendedStats, BaseStats, FightsResults
+from app.db.models import Base, BaseStats, ExtendedStats, FightsResults
 from app.db.models.fighters import Fighters
 from app.schemas import ExtendedFighter as ExtendedFighterSchema
 from app.schemas.extended_fighter import ExtendedFighterFilter
@@ -91,30 +91,17 @@ class DatabaseManager:
             return None
         return [FighterSchema.model_validate(fighter) for fighter in fighters]
 
-
-    async def get_fighter_id_by_name_nickname_surname(
+    async def get_fighter_by_name_nickname_surname(
         self, name: str, nickname: str, surname: str
-    ) -> int:
-
+    ):
         stmt = select(Fighters).where(
             Fighters.name == name,
             Fighters.nickname == nickname,
-            Fighters.surname == surname
+            Fighters.surname == surname,
         )
-        record = await self.db.execute(stmt)
-        result = record.scalars().first()
-        fighter = FighterSchema.model_validate(result)
+        result = await self.db.execute(stmt)
 
-        return fighter.fighter_id
-
-        # records = await self._get_records_from_table_with_column_and_value(
-        #     Fighters, "country", country
-        # )
-        # fighters = records.scalars().all()
-        # if fighters is None:
-        #     return None
-        # return [FighterSchema.model_validate(fighter) for fighter in fighters]
-
+        return result.scalar_one_or_none()
 
     async def get_all_available_fighter_statistics_by_country(
         self, country: str
@@ -139,47 +126,68 @@ class DatabaseManager:
 
     #######################################POST METHODS#############################################
 
-    # async def post_single_base_data_to_database(
-    #     self, data: FighterFilter
-    # ) -> CursorResult:
-    #     stmt = insert(Fighters).values(**data)
-    #     result = await self.db.execute(stmt)
-    #     await self.db.commit()
-    #     return result
-
-    async def post_single_base_data_to_database(
-        self, data: FighterFilter
-    ) -> bool:
+    async def post_single_base_data_to_database(self, data: FighterFilter) -> bool:
         self.db.add(Fighters(**data))
         await self.db.commit()
         return True
-        # return result
 
-    async def post_single_extended_data_to_database(
-        self, data: dict
-    ):
-        data['base_stats'] = BaseStats(**data["base_stats"])
-        data['extended_stats'] = ExtendedStats(**data["extended_stats"])
-        data['fights_results'] = FightsResults(**data["fights_results"])
+    async def post_single_extended_data_to_database(self, data: dict):
+        data["base_stats"] = BaseStats(**data["base_stats"])
+        data["extended_stats"] = ExtendedStats(**data["extended_stats"])
+        data["fights_results"] = FightsResults(**data["fights_results"])
         fighter = Fighters(**data)
         self.db.add(fighter)
         await self.db.commit()
 
-
-
     #######################################PUT METHODS#############################################
 
-    async def update_base_fighter(
-        self, fighter_id: int, data: dict
-    ) -> Union[FighterSchema, None]:
-        ...
-        #todo dokonczyc
-        # if fighter is None:
-        #     return None
-        # return FighterSchema.model_validate(fighter)
+    async def update_base_fighter_by_id(self, fighter_id: int, data: dict) -> bool:
+        fighter = await self.db.get(Fighters, fighter_id)
+        for key, value in data.items():
+            setattr(fighter, key, value)
+        await self.db.commit()
+        await self.db.refresh(fighter)
+        return True
+
+    async def update_base_fighter_name_nickname_surname(
+        self, name: str, nickname: str, surname: str, data: dict
+    ) -> bool:
+        fighter = await self.get_fighter_by_name_nickname_surname(
+            name, nickname, surname
+        )
+        for key, value in data.items():
+            setattr(fighter, key, value)
+        await self.db.commit()
+        await self.db.refresh(fighter)
+        return True
+
+    async def update_extender_fighter_by_id(self, fighter_id: int, data: dict) -> bool:
+        fighter = await self.db.get(Fighters, fighter_id)
+        data["base_stats"] = BaseStats(**data["base_stats"])
+        data["extended_stats"] = ExtendedStats(**data["extended_stats"])
+        data["fights_results"] = FightsResults(**data["fights_results"])
+        for key, value in data.items():
+            setattr(fighter, key, value)
+        await self.db.commit()
+        await self.db.refresh(fighter)
+        return True
+
+    async def update_extender_fighter_name_nickname_surname(
+        self, name: str, nickname: str, surname: str, data: dict
+    ) -> bool:
+        fighter = await self.get_fighter_by_name_nickname_surname(
+            name, nickname, surname
+        )
+        data["base_stats"] = BaseStats(**data["base_stats"])
+        data["extended_stats"] = ExtendedStats(**data["extended_stats"])
+        data["fights_results"] = FightsResults(**data["fights_results"])
+        for key, value in data.items():
+            setattr(fighter, key, value)
+        await self.db.commit()
+        await self.db.refresh(fighter)
+        return True
 
     #######################################DELETE METHODS#############################################
-
 
     async def remove_record_by_fighter_id(self, fighter_id: int):
         stmt = delete(Fighters).where(Fighters.fighter_id == fighter_id)

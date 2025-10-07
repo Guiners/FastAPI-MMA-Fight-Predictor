@@ -59,5 +59,7 @@ class Fighters(Base):
     )
 
     __table_args__ = (
-        UniqueConstraint("name", "nickname", "surname", name="uq_name_nickname_surname"),
+        UniqueConstraint(
+            "name", "nickname", "surname", name="uq_name_nickname_surname"
+        ),
     )

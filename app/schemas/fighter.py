@@ -41,4 +41,3 @@ class Fighter(BaseModel):
 
 
 FighterFilter = create_filter_schema(Fighter)
-
