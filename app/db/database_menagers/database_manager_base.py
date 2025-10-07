@@ -12,124 +12,57 @@ from app.schemas.fighter import Fighter as FighterSchema
 from app.schemas.fighter import FighterFilter
 from app.tools.logger import logger
 
-
-class DatabaseManager:
-    def __init__(self, db: AsyncSession):
-        self.db = db
-        self.extended_fighter_stmt = select(Fighters).options(
+BASE_STMT = select(Fighters)
+EXTENDED_STMT = select(Fighters).options(
             joinedload(Fighters.base_stats),
             joinedload(Fighters.extended_stats),
             joinedload(Fighters.fights_results),
-        )  # question joinedload czy selectinload bedzie bardziej efektywny
+        )
+#todo split it to DatabaseManagerGetter? i DatabaseManagerUpdater czy cos
+
+class DatabaseManagerBase:
+    def __init__(self, db: AsyncSession, extended: bool):
+        self.db = db
+        self.stmt = EXTENDED_STMT if extended else BASE_STMT
+        self.fighter_schema = ExtendedFighterSchema if extended else FighterSchema
 
     #######################################GET METHODS#############################################
 
-    async def get_all_base_records_from_table(self, table):
-        records = await self.db.execute(select(table))
-        logger.info(f"Returning contents of {table.__name__}")
-        fighters = [
-            FighterSchema.model_validate(row) for row in records.scalars().all()
-        ]
-        return fighters
-
-    async def get_all_extended_records_from_table(self):
-        records = await self.db.execute(self.extended_fighter_stmt)
-        fighters = [
-            ExtendedFighterSchema.model_validate(row) for row in records.scalars().all()
-        ]
-        return fighters
-
-    async def _get_records_from_table_with_column_and_value(
-        self, table, column: str, value: Union[str, int], extended: bool = False
-    ):
-        logger.debug(f"Trying to get data from column: {column} with value: {value}")
-        if not hasattr(table, column):
-            raise ValueError(f"Column '{column}' does not exist in Fighters model")
-        column_attr = getattr(table, column)
-
-        if extended:
-            return await self.db.execute(
-                self.extended_fighter_stmt.where(column_attr == value)
-            )
-        else:
-            return await self.db.execute(select(table).where(column_attr == value))
 
     @staticmethod
-    def build_filters_from_model(_filters: FighterFilter, table=Fighters):
-        filters_dict = _filters.dict(exclude_none=True)
+    def build_where_stmt(filters: Union[FighterFilter, ExtendedFighterFilter]):
+        filters_dict = filters.dict(exclude_none=True)
         logger.debug(f"fighter filter: {filters_dict}")
-        filters = []
+        where_stmt = []
         for field, value in filters_dict.items():
-            if hasattr(table, field):
-                column = getattr(table, field)
-                filters.append(column == value)
+            if hasattr(Fighters, field):
+                column = getattr(Fighters, field)
+                where_stmt.append(column == value)
             else:
                 raise ValueError(f"Column '{field}' does not exist in Fighters model")
-        # todo can be moved in tools, can be extended to work also to extended fighter
-        return filters
+        return where_stmt
 
-    async def get_all_available_fighter_statistics_by_id(
-        self, fighter_id: int
-    ) -> Union[ExtendedFighterSchema, None]:
-        records = await self._get_records_from_table_with_column_and_value(
-            Fighters, "fighter_id", fighter_id, True
-        )
-        fighter = records.scalars().first()
-        if fighter is None:
-            return None
-        return ExtendedFighterSchema.model_validate(fighter)
 
-    async def get_data_by_fighter_id(
-        self, table, fighter_id: int
-    ) -> Union[FighterSchema, None]:
-        fighter = await self.db.get(table, fighter_id)
-        if fighter is None:
-            return None
-        return FighterSchema.model_validate(fighter)
+    async def _get_records_with_where_stmt(self, where_stmt: list):
+        records = await self.db.execute(self.stmt.where(*where_stmt))
+        fighters_list = records.scalars().all()
 
-    async def get_fighters_by_country(
-        self, country: str
-    ) -> Union[list[FighterSchema], None]:
-        records = await self._get_records_from_table_with_column_and_value(
-            Fighters, "country", country
-        )
-        fighters = records.scalars().all()
-        if fighters is None:
+        if fighters_list is None:
             return None
-        return [FighterSchema.model_validate(fighter) for fighter in fighters]
+
+        if len(fighters_list) > 1:
+            return [self.fighter_schema.model_validate(fighter) for fighter in fighters_list]
+        return self.fighter_schema.model_validate(fighters_list[0])
+
 
     async def get_fighter_by_name_nickname_surname(
         self, name: str, nickname: str, surname: str
     ):
-        stmt = select(Fighters).where(
-            Fighters.name == name,
+        where_stmt = [Fighters.name == name,
             Fighters.nickname == nickname,
-            Fighters.surname == surname,
-        )
-        result = await self.db.execute(stmt)
+            Fighters.surname == surname]
+        return await self._get_records_with_where_stmt(where_stmt)
 
-        return result.scalar_one_or_none()
-
-    async def get_all_available_fighter_statistics_by_country(
-        self, country: str
-    ) -> Union[list[ExtendedFighterSchema], None]:
-        records = await self._get_records_from_table_with_column_and_value(
-            Fighters, "country", country, True
-        )
-        fighters = records.scalars().all()
-        if fighters is None:
-            return None
-        return [ExtendedFighterSchema.model_validate(fighter) for fighter in fighters]
-
-    async def get_all_available_fighter_statistics_by_own_parameters(
-        self, fighter_filters: FighterFilter
-    ) -> Union[list[ExtendedFighterSchema], None]:
-        filters = self.build_filters_from_model(fighter_filters)
-        result = await self.db.execute(self.extended_fighter_stmt.where(*filters))
-        fighters = result.scalars().all()
-        if fighters is None:
-            return None
-        return [ExtendedFighterSchema.model_validate(fighter) for fighter in fighters]
 
     #######################################POST METHODS#############################################
 

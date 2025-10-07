@@ -1,0 +1,50 @@
+from typing import List, Union
+
+from sqlalchemy import CursorResult, delete, insert, select, text
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import joinedload
+
+from app.db.database_menagers.database_manager_base import DatabaseManagerBase
+from app.db.models import Base, BaseStats, ExtendedStats, FightsResults
+from app.db.models.fighters import Fighters
+from app.schemas import ExtendedFighter as ExtendedFighterSchema
+from app.schemas.extended_fighter import ExtendedFighterFilter
+from app.schemas.fighter import Fighter as FighterSchema
+from app.schemas.fighter import FighterFilter
+from app.tools.logger import logger
+
+class DatabaseManagerGetter(DatabaseManagerBase):
+
+
+    # todo typing
+    async def _get_records_by_single_value(
+        self, column: str, value: Union[str, int]):
+        column_attr = getattr(Fighters, column)
+        return await self._get_records_with_where_stmt([column_attr == value])
+
+    # todo typing
+    async def get_all_fighters_records(self):
+        records = await self.db.execute(self.stmt)
+        logger.info(f"Returning contents of {self.fighter_schema.__name__}")
+        fighters = [
+            self.fighter_schema.model_validate(row) for row in records.scalars().all()
+        ]
+        return fighters
+
+    #todo typing
+    async def get_fighter_by_id(self, fighter_id: int):
+        return await self._get_records_by_single_value("fighter_id", fighter_id)
+
+    # todo typing
+    async def get_fighters_by_country(self, country: str):
+        return await self._get_records_by_single_value("country", country)
+
+    # todo typing
+    async def search_extended_fighter(
+        self, fighter_filters: FighterFilter
+    ):
+        where_stmt = self.build_where_stmt(fighter_filters)
+        return await self._get_records_with_where_stmt(where_stmt)
+
+
+
