@@ -8,6 +8,7 @@ from app.db.models.base_stats import BaseStats
 from app.db.models.extended_stats import ExtendedStats
 from app.db.models.fighters import Fighters
 from app.db.models.fights_results import FightsResults
+from app.schemas import ExtendedFighter as ExtendedFighterSchema
 from app.db.scripts.database_manager import DatabaseManager
 from app.middleware.middlewares import log_requests
 from app.schemas.extended_fighter import ExtendedFighter, ExtendedFighterFilter
@@ -28,12 +29,19 @@ async def root():
 #######################################GET METHODS#############################################
 
 
-@app.get("/all_fighters")
+@app.get("/all_base_fighters")
 @handle_empty_response
-async def get_all_fighters_list(
+async def get_all_base_fighters_list(
     db: AsyncSession = Depends(get_db),
 ) -> List[FighterSchema]:
-    return await DatabaseManager(db).get_all_records_from_table(Fighters)
+    return await DatabaseManager(db).get_all_base_records_from_table(Fighters)
+
+@app.get("/all_extended_fighters")
+@handle_empty_response
+async def get_all_extended_fighters_list(
+    db: AsyncSession = Depends(get_db),
+) -> List[ExtendedFighterSchema]:
+    return await DatabaseManager(db).get_all_extended_records_from_table()
 
 
 @app.get("/fighter/id/{fighter_id}")

@@ -24,13 +24,22 @@ class DatabaseManager:
 
     #######################################GET METHODS#############################################
 
-    async def get_all_records_from_table(self, table):
+    async def get_all_base_records_from_table(self, table):
         records = await self.db.execute(select(table))
         logger.info(f"Returning contents of {table.__name__}")
         fighters = [
             FighterSchema.model_validate(row) for row in records.scalars().all()
         ]
         return fighters
+
+    async def get_all_extended_records_from_table(self):
+        records = await self.db.execute(self.extended_fighter_stmt)
+        fighters = [
+            ExtendedFighterSchema.model_validate(row) for row in records.scalars().all()
+        ]
+        return fighters
+
+
 
     async def _get_records_from_table_with_column_and_value(
         self, table, column: str, value: Union[str, int], extended: bool = False
