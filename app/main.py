@@ -146,6 +146,7 @@ async def create_multiple_extended_fighter(
 
 
 @app.put("/update_base_fighter/{fighter_id}")
+@handle_empty_response
 async def update_base_fighter_by_id(
     fighter_id: int,
     fighter_data: FighterFilter = Depends(),
@@ -156,6 +157,7 @@ async def update_base_fighter_by_id(
 
 
 @app.put("/update_base_fighter/{name}/{nickname}/{surname}")
+@handle_empty_response
 async def update_base_fighter_by_name(
     name: str,
     nickname: str,
@@ -170,6 +172,7 @@ async def update_base_fighter_by_name(
 
 
 @app.put("/update_extended_fighter/{fighter_id}")
+@handle_empty_response
 async def update_extended_fighter_by_id(
     fighter_id: int,
     fighter_data: ExtendedFighterFilter,
@@ -182,6 +185,7 @@ async def update_extended_fighter_by_id(
 
 
 @app.put("/update_extended_fighter/{name}/{nickname}/{surname}")
+@handle_empty_response
 async def update_extended_fighter_by_name(
     name: str,
     nickname: str,

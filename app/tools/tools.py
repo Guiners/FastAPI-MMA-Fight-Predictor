@@ -13,7 +13,7 @@ def handle_empty_response(func):
         try:
             response = await func(*args, **kwargs)
 
-            if type(response) is int:
+            if type(response) in (int, bool):
                 pass
 
             elif not response or None in response or response == []:
