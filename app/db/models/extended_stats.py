@@ -39,15 +39,15 @@ class ExtendedStats(Base):
         unique=True,
         nullable=False,
     )
-    stance: Mapped[str] = mapped_column(String(50))
-    slpm: Mapped[float] = mapped_column(Float)
-    str_acc: Mapped[float] = mapped_column(Float)
-    sapm: Mapped[float] = mapped_column(Float)
-    str_def: Mapped[float] = mapped_column(Float)
-    td_avg: Mapped[float] = mapped_column(Float)
-    td_acc: Mapped[float] = mapped_column(Float)
-    td_def: Mapped[float] = mapped_column(Float)
-    sub_avg: Mapped[float] = mapped_column(Float)
+    stance: Mapped[str] = mapped_column(String(50), nullable=True)
+    slpm: Mapped[float] = mapped_column(Float, nullable=True)
+    str_acc: Mapped[float] = mapped_column(Float, nullable=True)
+    sapm: Mapped[float] = mapped_column(Float, nullable=True)
+    str_def: Mapped[float] = mapped_column(Float, nullable=True)
+    td_avg: Mapped[float] = mapped_column(Float, nullable=True)
+    td_acc: Mapped[float] = mapped_column(Float, nullable=True)
+    td_def: Mapped[float] = mapped_column(Float, nullable=True)
+    sub_avg: Mapped[float] = mapped_column(Float, nullable=True)
     last_updated: Mapped[Date] = mapped_column(Date, default=func.now())
 
     # relationships

@@ -1,6 +1,9 @@
 from datetime import date
+from typing import Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, create_model
+
+from app.tools.tools import create_filter_schema
 
 
 class BaseStats(BaseModel):
@@ -14,12 +17,15 @@ class BaseStats(BaseModel):
         last_updated (date): Date when the record was last updated.
     """
 
-    fighter_id: int
-    weight: float
-    height: float
-    reach: float
-    age: int
+    fighter_id: Optional[int] = None
+    weight: Optional[float] = None
+    height: Optional[float] = None
+    reach: Optional[float] = None
+    age: Optional[int] = None
     last_updated: date
 
     class Config:
-        orm_mode = True
+        from_attributes = True
+
+
+BaseStatsFilter = create_filter_schema(BaseStats)

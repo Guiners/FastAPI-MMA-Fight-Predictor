@@ -1,6 +1,9 @@
 from datetime import date
+from typing import Optional
 
 from pydantic import BaseModel
+
+from app.tools.tools import create_filter_schema
 
 
 class ExtendedStats(BaseModel):
@@ -19,17 +22,20 @@ class ExtendedStats(BaseModel):
         last_updated (date): Date when the record was last updated.
     """
 
-    fighter_id: int
-    stance: str
-    slpm: float
-    str_acc: float
-    sapm: float
-    str_def: float
-    td_avg: float
-    td_acc: float
-    td_def: float
-    sub_avg: float
+    fighter_id: Optional[int]
+    stance: Optional[str]
+    slpm: Optional[float]
+    str_acc: Optional[float]
+    sapm: Optional[float]
+    str_def: Optional[float]
+    td_avg: Optional[float]
+    td_acc: Optional[float]
+    td_def: Optional[float]
+    sub_avg: Optional[float]
     last_updated: date
 
     class Config:
-        orm_mode = True
+        from_attributes = True
+
+
+ExtendedStatsFilter = create_filter_schema(ExtendedStats)

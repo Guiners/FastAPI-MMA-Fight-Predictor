@@ -33,10 +33,10 @@ class BaseStats(Base):
         unique=True,
         nullable=False,
     )
-    weight: Mapped[float] = mapped_column(Float)
-    height: Mapped[float] = mapped_column(Float)
-    reach: Mapped[float] = mapped_column(Float)
-    age: Mapped[int] = mapped_column(Integer)
+    weight: Mapped[float] = mapped_column(Float, nullable=True)
+    height: Mapped[float] = mapped_column(Float, nullable=True)
+    reach: Mapped[float] = mapped_column(Float, nullable=True)
+    age: Mapped[int] = mapped_column(Integer, nullable=True)
     last_updated: Mapped[Date] = mapped_column(Date, default=func.now())
 
     # relationships

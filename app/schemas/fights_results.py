@@ -1,6 +1,9 @@
 from datetime import date
+from typing import Optional
 
 from pydantic import BaseModel
+
+from app.tools.tools import create_filter_schema
 
 
 class FightsResults(BaseModel):
@@ -17,15 +20,18 @@ class FightsResults(BaseModel):
         last_updated (date): Date when the record was last updated.
     """
 
-    fighter_id: int
-    win_by_ko_tko: int
-    loss_by_ko_tko: int
-    win_by_sub: int
-    loss_by_sub: int
-    win_by_dec: int
-    loss_by_dec: int
-    non_contest: int
+    fighter_id: Optional[int]
+    win_by_ko_tko: Optional[int]
+    loss_by_ko_tko: Optional[int]
+    win_by_sub: Optional[int]
+    loss_by_sub: Optional[int]
+    win_by_dec: Optional[int]
+    loss_by_dec: Optional[int]
+    non_contest: Optional[int]
     last_updated: date
 
     class Config:
-        orm_mode = True
+        from_attributes = True
+
+
+FightsResultsFilter = create_filter_schema(FightsResults)

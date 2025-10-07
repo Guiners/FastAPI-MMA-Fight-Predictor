@@ -1,6 +1,9 @@
 from datetime import date
+from typing import Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, create_model
+
+from app.tools.tools import create_filter_schema
 
 
 class Fighter(BaseModel):
@@ -21,17 +24,20 @@ class Fighter(BaseModel):
     """
 
     fighter_id: int
-    name: str
-    nickname: str
-    surname: str
-    country: str
-    weight_class: str
-    wins: int
-    loss: int
-    draw: int
-    current_streak: int
-    last_fight_date: date
+    name: Optional[str]
+    nickname: Optional[str]
+    surname: Optional[str]
+    country: Optional[str]
+    weight_class: Optional[str]
+    wins: Optional[int]
+    loss: Optional[int]
+    draw: Optional[int]
+    current_streak: Optional[int]
+    last_fight_date: Optional[date]
     last_updated: date
 
     class Config:
-        orm_mode = True
+        from_attributes = True
+
+
+FighterFilter = create_filter_schema(Fighter)

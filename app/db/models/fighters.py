@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from sqlalchemy import Date, Integer, String
+from sqlalchemy import Date, Integer, String, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import func
 
@@ -35,16 +35,16 @@ class Fighters(Base):
     fighter_id: Mapped[int] = mapped_column(
         Integer, primary_key=True, unique=True, nullable=False, autoincrement=True
     )
-    name: Mapped[str] = mapped_column(String(50))
-    nickname: Mapped[str] = mapped_column(String(50))
-    surname: Mapped[str] = mapped_column(String(50))
-    country: Mapped[str] = mapped_column(String(50))
-    weight_class: Mapped[str] = mapped_column(String(50))
-    wins: Mapped[int] = mapped_column(Integer)
-    loss: Mapped[int] = mapped_column(Integer)
-    draw: Mapped[int] = mapped_column(Integer)
-    current_streak: Mapped[int] = mapped_column(Integer)
-    last_fight_date: Mapped[Date] = mapped_column(Date)
+    name: Mapped[str] = mapped_column(String(50), nullable=True)
+    nickname: Mapped[str] = mapped_column(String(50), nullable=True)
+    surname: Mapped[str] = mapped_column(String(50), nullable=True)
+    country: Mapped[str] = mapped_column(String(50), nullable=True)
+    weight_class: Mapped[str] = mapped_column(String(50), nullable=True)
+    wins: Mapped[int] = mapped_column(Integer, nullable=True)
+    loss: Mapped[int] = mapped_column(Integer, nullable=True)
+    draw: Mapped[int] = mapped_column(Integer, nullable=True)
+    current_streak: Mapped[int] = mapped_column(Integer, nullable=True)
+    last_fight_date: Mapped[Date] = mapped_column(Date, nullable=True)
     last_updated: Mapped[Date] = mapped_column(Date, default=func.now())
 
     # relationships
@@ -54,6 +54,12 @@ class Fighters(Base):
     extended_stats: Mapped["ExtendedStats"] = relationship(
         back_populates="fighter", uselist=False
     )
-    fight_results: Mapped["FightsResults"] = relationship(
+    fights_results: Mapped["FightsResults"] = relationship(
         back_populates="fighter", uselist=False
+    )
+
+    __table_args__ = (
+        UniqueConstraint(
+            "name", "nickname", "surname", name="uq_name_nickname_surname"
+        ),
     )
