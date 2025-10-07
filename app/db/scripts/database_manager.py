@@ -39,8 +39,6 @@ class DatabaseManager:
         ]
         return fighters
 
-
-
     async def _get_records_from_table_with_column_and_value(
         self, table, column: str, value: Union[str, int], extended: bool = False
     ):

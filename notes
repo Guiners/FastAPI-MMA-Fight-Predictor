@@ -14,3 +14,21 @@ docker exec -it app alembic upgrade head
 
 test data:
 
+flaga autocomit w sql alchemy
+
+@app.exception_handler(typ exception)
+napisac taki handler - soobny folder exeption
+htpp_exceptions np - custom exceptions mozna sb napisac
+
+
+folder routesi endpoints jakos to podzielic
+!router
+endpoint jako osobny folder
+
+logowanie z tokenem z lifespanem i sprawdzenie uprawnien i expirowanie tokena
+
+
+kazac copilotowi przeanalizowac wymagania peexa
+
+
+api lifespan - zawsze sie dopaal kiedy fastappi podnosi

@@ -8,9 +8,9 @@ from app.db.models.base_stats import BaseStats
 from app.db.models.extended_stats import ExtendedStats
 from app.db.models.fighters import Fighters
 from app.db.models.fights_results import FightsResults
-from app.schemas import ExtendedFighter as ExtendedFighterSchema
 from app.db.scripts.database_manager import DatabaseManager
 from app.middleware.middlewares import log_requests
+from app.schemas import ExtendedFighter as ExtendedFighterSchema
 from app.schemas.extended_fighter import ExtendedFighter, ExtendedFighterFilter
 from app.schemas.fighter import Fighter as FighterSchema
 from app.schemas.fighter import FighterFilter
@@ -35,6 +35,7 @@ async def get_all_base_fighters_list(
     db: AsyncSession = Depends(get_db),
 ) -> List[FighterSchema]:
     return await DatabaseManager(db).get_all_base_records_from_table(Fighters)
+
 
 @app.get("/all_extended_fighters")
 @handle_empty_response
