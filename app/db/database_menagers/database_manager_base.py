@@ -53,7 +53,7 @@ class DatabaseManagerBase:
         records = await self.db.execute(self.stmt.where(*where_stmt))
         fighters_list = records.scalars().all()
 
-        if fighters_list is None:
+        if not fighters_list:
             return None
 
         convert = self.fighter_schema.model_validate if validate else (lambda x: x)
