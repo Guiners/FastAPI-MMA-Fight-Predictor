@@ -4,10 +4,8 @@ from fastapi import Depends, FastAPI, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db.database import get_db
-from app.db.database_menagers.database_manager_getter import \
-    DatabaseManagerGetter
-from app.db.database_menagers.database_manager_updater import \
-    DatabaseManagerUpdater
+from app.db.database_menagers.database_manager_getter import DatabaseManagerGetter
+from app.db.database_menagers.database_manager_updater import DatabaseManagerUpdater
 from app.db.models.fighters import Fighters
 from app.middleware.middlewares import log_requests
 from app.schemas import ExtendedFighter as ExtendedFighterSchema
@@ -23,7 +21,9 @@ app.middleware("http")(log_requests)
 
 @app.get("/")
 async def root():
-    return {"message": "Hello World"}
+    return {"message": "Welcome to MMA Fight Predictor"}
+
+# app.include_router()
 
 
 #######################################GET METHODS#############################################

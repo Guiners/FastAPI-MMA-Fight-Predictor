@@ -80,7 +80,6 @@ class DatabaseManagerBase:
         ]
         return await self._get_records_with_where_stmt(where_stmt, validate)
 
-    #####################################OTHER METHODS#############################################
     async def clear_all_tables(self) -> None:
         meta = Base.metadata
         for table in reversed(meta.sorted_tables):

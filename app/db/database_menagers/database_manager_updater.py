@@ -29,12 +29,18 @@ class DatabaseManagerUpdater(DatabaseManagerBase):
     async def add_multiple_fighters(
         self, fighters_data: List[Union[FighterFilter, ExtendedFighterFilter]]
     ):
-        db_responses = []
-        for single_fighter_data in fighters_data:
-            response = await self.add_fighter(single_fighter_data)
-            db_responses.append(response)
+        fighters_to_add = []
+        for fighter_data in fighters_data:
+            data = fighter_data.dict(exclude_none=True)
+            if self.is_extended:
+                self.convert_stats_dicts_to_models(data)
+            fighters_to_add.append(Fighters(**data))
 
-        return db_responses
+        if fighters_to_add:
+            self.db.add_all(fighters_to_add)
+            await self.db.commit()
+
+        return [True for _ in fighters_to_add]
 
     async def _update_fighter(self, fighter, fighter_data: FighterFilter):
         data = fighter_data.dict(exclude_none=True)
@@ -72,9 +78,9 @@ class DatabaseManagerUpdater(DatabaseManagerBase):
         return None
 
     async def remove_multiple_records(self, list_of_ids: List[int]):
-        db_responses = []
-        for fighter_id in list_of_ids:
-            response = await self.remove_record_by_fighter_id(fighter_id)
-            db_responses.append(response)
-
-        return db_responses
+        if not list_of_ids:
+            return []
+        stmt = delete(Fighters).where(Fighters.fighter_id.in_(list_of_ids))
+        result = await self.db.execute(stmt)
+        await self.db.commit()
+        return result
