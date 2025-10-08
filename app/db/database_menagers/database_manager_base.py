@@ -84,7 +84,7 @@ class DatabaseManagerBase:
     async def clear_all_tables(self) -> None:
         meta = Base.metadata
         for table in reversed(meta.sorted_tables):
-            logger.info("Truncating:", table)
+            logger.info(f"Truncating: {table}")
             await self.db.execute(
                 text(f'TRUNCATE TABLE "{table.name}" RESTART IDENTITY CASCADE;')
             )
