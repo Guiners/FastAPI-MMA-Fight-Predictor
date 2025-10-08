@@ -4,8 +4,11 @@ from fastapi import Depends, FastAPI, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db.database import get_db
+from app.db.database_menagers.database_manager_getter import \
+    DatabaseManagerGetter
+from app.db.database_menagers.database_manager_updater import \
+    DatabaseManagerUpdater
 from app.db.models.fighters import Fighters
-from app.db.database_menagers.database_manager_getter import DatabaseManagerGetter
 from app.middleware.middlewares import log_requests
 from app.schemas import ExtendedFighter as ExtendedFighterSchema
 from app.schemas.extended_fighter import ExtendedFighter, ExtendedFighterFilter
@@ -48,6 +51,7 @@ async def get_base_fighter_by_id(
     fighter_id: int, db: AsyncSession = Depends(get_db)
 ) -> FighterSchema:
     return await DatabaseManagerGetter(db, False).get_fighter_by_id(fighter_id)
+
 
 @app.get("/extended_fighter/id/{fighter_id}")
 @handle_empty_response
@@ -92,138 +96,137 @@ async def get_extended_fighter_by_name_nickname_surname(
         name, nickname, surname
     )
 
+
 @app.get("/extended_fighter_stats/search")
 @handle_empty_response
 async def search_fighters(
     fighter_filters: FighterFilter = Depends(), db: AsyncSession = Depends(get_db)
 ) -> Union[List[ExtendedFighterSchema], ExtendedFighterSchema]:
-    return await DatabaseManagerGetter(
-        db, True
-    ).search_extended_fighter(fighter_filters)
-#
-#
+    return await DatabaseManagerGetter(db, True).search_extended_fighter(
+        fighter_filters
+    )
+
+
 # #######################################POST METHODS#############################################
-#
-#
-# @app.post("/create_base_fighter")
-# async def create_base_fighter(
-#     fighter_data: FighterFilter = Depends(), db: AsyncSession = Depends(get_db)
-# ):
-#     data_to_add = fighter_data.dict(exclude_none=True)
-#     return await DatabaseManager(db).post_single_base_data_to_database(data_to_add)
-#
-#
-# @app.post("/create_multiple_base_fighter")
-# async def create_multiple_base_fighter(
-#     fighters_data: List[FighterFilter], db: AsyncSession = Depends(get_db)
-# ):
-#     db_responses = []
-#     for fighter_data in fighters_data:
-#         fighter = fighter_data.dict(exclude_none=True)
-#         response = await DatabaseManager(db).post_single_base_data_to_database(fighter)
-#         db_responses.append(response)
-#
-#     return db_responses
-#
-#
-# @app.post("/create_extended_fighter")
-# async def create_extended_fighter(
-#     fighter_data: ExtendedFighterFilter, db: AsyncSession = Depends(get_db)
-# ):
-#     data_to_add = fighter_data.dict(exclude_none=True)
-#     return await DatabaseManager(db).post_single_extended_data_to_database(data_to_add)
-#
-#
-# @app.post("/create_multiple_extended_fighter")
-# async def create_multiple_extended_fighter(
-#     fighters_data: List[ExtendedFighterFilter], db: AsyncSession = Depends(get_db)
-# ):
-#     db_responses = []
-#     for fighter_data in fighters_data:
-#         fighter = fighter_data.dict(exclude_none=True)
-#         response = await DatabaseManager(db).post_single_extended_data_to_database(
-#             fighter
-#         )
-#         db_responses.append(response)
-#
-#     return db_responses
+
+
+@app.post("/base_fighter/create")
+async def create_base_fighter(
+    fighter_data: FighterFilter = Depends(), db: AsyncSession = Depends(get_db)
+):
+    return await DatabaseManagerUpdater(db, False).add_fighter(fighter_data)
+
+
+@app.post("/extended_fighter/create")
+async def create_extended_fighter(
+    fighter_data: ExtendedFighterFilter, db: AsyncSession = Depends(get_db)
+):
+    return await DatabaseManagerUpdater(db, True).add_fighter(fighter_data)
+
+
+@app.post("/base_fighter/create_multiple")
+async def create_multiple_base_fighter(
+    fighters_data: List[FighterFilter], db: AsyncSession = Depends(get_db)
+):
+    return await DatabaseManagerUpdater(db, False).add_multiple_fighters(fighters_data)
+
+
+@app.post("/extended_fighter/create_multiple")
+async def create_multiple_extended_fighter(
+    fighters_data: List[ExtendedFighterFilter], db: AsyncSession = Depends(get_db)
+):
+    return await DatabaseManagerUpdater(db, True).add_multiple_fighters(fighters_data)
+
+
 #
 #
 # #######################################PUT METHODS#############################################
 #
 #
-# @app.put("/update_base_fighter/{fighter_id}")
+@app.put("/base_fighter/update/id/{fighter_id}")
+@handle_empty_response
+async def update_base_fighter_by_id(
+    fighter_id: int,
+    fighter_data: FighterFilter = Depends(),
+    db: AsyncSession = Depends(get_db),
+):
+    return await DatabaseManagerUpdater(db, False).update_fighter_by_id(
+        fighter_id, fighter_data
+    )
+
+
+@app.put("/extended_fighter/update/id/{fighter_id}")
+@handle_empty_response
+async def update_extended_fighter_by_id(
+    fighter_id: int,
+    fighter_data: ExtendedFighterFilter,
+    db: AsyncSession = Depends(get_db),
+):
+    return await DatabaseManagerUpdater(db, True).update_fighter_by_id(
+        fighter_id, fighter_data
+    )
+
+
+@app.put("/base_fighter/update/name/{name}/{nickname}/{surname}")
 # @handle_empty_response
-# async def update_base_fighter_by_id(
-#     fighter_id: int,
-#     fighter_data: FighterFilter = Depends(),
-#     db: AsyncSession = Depends(get_db),
-# ):
-#     data_to_add = fighter_data.dict(exclude_none=True)
-#     return await DatabaseManager(db).update_base_fighter_by_id(fighter_id, data_to_add)
-#
-#
-# @app.put("/update_base_fighter/{name}/{nickname}/{surname}")
-# @handle_empty_response
-# async def update_base_fighter_by_name(
-#     name: str,
-#     nickname: str,
-#     surname: str,
-#     fighter_data: FighterFilter = Depends(),
-#     db: AsyncSession = Depends(get_db),
-# ):
-#     data_to_add = fighter_data.dict(exclude_none=True)
-#     return await DatabaseManager(db).update_base_fighter_name_nickname_surname(
-#         name, nickname, surname, data_to_add
-#     )
-#
-#
-# @app.put("/update_extended_fighter/{fighter_id}")
-# @handle_empty_response
-# async def update_extended_fighter_by_id(
-#     fighter_id: int,
-#     fighter_data: ExtendedFighterFilter,
-#     db: AsyncSession = Depends(get_db),
-# ):
-#     data_to_add = fighter_data.dict(exclude_none=True)
-#     return await DatabaseManager(db).update_extender_fighter_by_id(
-#         fighter_id, data_to_add
-#     )
-#
-#
-# @app.put("/update_extended_fighter/{name}/{nickname}/{surname}")
-# @handle_empty_response
-# async def update_extended_fighter_by_name(
-#     name: str,
-#     nickname: str,
-#     surname: str,
-#     fighter_data: ExtendedFighterFilter,
-#     db: AsyncSession = Depends(get_db),
-# ):
-#     data_to_add = fighter_data.dict(exclude_none=True)
-#     return await DatabaseManager(db).update_extender_fighter_name_nickname_surname(
-#         name, nickname, surname, data_to_add
-#     )
-#
-#
+async def update_base_fighter_by_name(
+    name: str,
+    nickname: str,
+    surname: str,
+    fighter_data: FighterFilter = Depends(),
+    db: AsyncSession = Depends(get_db),
+):
+    return await DatabaseManagerUpdater(
+        db, False
+    ).update_fighter_by_name_nickname_surname(name, nickname, surname, fighter_data)
+
+
+@app.put("/extended_fighter/update/name/{name}/{nickname}/{surname}")
+@handle_empty_response
+async def update_extended_fighter_by_name(
+    name: str,
+    nickname: str,
+    surname: str,
+    fighter_data: ExtendedFighterFilter,
+    db: AsyncSession = Depends(get_db),
+):
+    return await DatabaseManagerUpdater(
+        db, True
+    ).update_fighter_by_name_nickname_surname(name, nickname, surname, fighter_data)
+
+
+# #
+# #
 # #######################################DELETE METHODS#############################################
 #
 #
-# @app.delete("/delete_fighter/{fighter_id}")
-# @handle_empty_response
-# async def update_base_fighter(fighter_id: int, db: AsyncSession = Depends(get_db)):
-#     return await DatabaseManager(db).remove_record_by_fighter_id(fighter_id)
-#
-#
-# @app.delete("/delete_multiple_fighter")
-# @handle_empty_response
-# async def update_base_fighter_by_id(
-#     list_of_ids: List[int] = Query, db: AsyncSession = Depends(get_db)
-# ):
-#     db_responses = []
-#
-#     for fighter_id in list_of_ids:
-#         response = await DatabaseManager(db).remove_record_by_fighter_id(fighter_id)
-#         db_responses.append(response)
-#
-#     return db_responses
+@app.delete("/base_fighter/id/{fighter_id}")
+@handle_empty_response
+async def delete_base_fighter(fighter_id: int, db: AsyncSession = Depends(get_db)):
+    return await DatabaseManagerUpdater(db, False).remove_record_by_fighter_id(
+        fighter_id
+    )
+
+
+@app.delete("/extended_fighter/id/{fighter_id}")
+@handle_empty_response
+async def delete_extended_fighter(fighter_id: int, db: AsyncSession = Depends(get_db)):
+    return await DatabaseManagerUpdater(db, True).remove_record_by_fighter_id(
+        fighter_id
+    )
+
+
+@app.delete("/base_fighter/delete_multiple/id/{fighter_id}")
+@handle_empty_response
+async def delete_multiple_base_fighter(
+    list_of_ids: List[int] = Query, db: AsyncSession = Depends(get_db)
+):
+    return await DatabaseManagerUpdater(db, False).remove_multiple_records(list_of_ids)
+
+
+@app.delete("/extended_fighter/delete_multiple/id/{fighter_id}")
+@handle_empty_response
+async def delete_multiple_extended_fighter(
+    list_of_ids: List[int] = Query, db: AsyncSession = Depends(get_db)
+):
+    return await DatabaseManagerUpdater(db, True).remove_multiple_records(list_of_ids)
