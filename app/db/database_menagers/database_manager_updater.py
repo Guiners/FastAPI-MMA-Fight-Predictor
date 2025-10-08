@@ -1,17 +1,11 @@
 from typing import List, Union
 
-from sqlalchemy import CursorResult, delete, insert, select, text
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm import joinedload
+from sqlalchemy import delete
 
 from app.db.database_menagers.database_manager_base import DatabaseManagerBase
-from app.db.models import Base, BaseStats, ExtendedStats, FightsResults
 from app.db.models.fighters import Fighters
-from app.schemas import ExtendedFighter as ExtendedFighterSchema
 from app.schemas.extended_fighter import ExtendedFighterFilter
-from app.schemas.fighter import Fighter as FighterSchema
 from app.schemas.fighter import FighterFilter
-from app.tools.logger import logger
 
 
 class DatabaseManagerUpdater(DatabaseManagerBase):

@@ -1,7 +1,4 @@
-from typing import Union
-
 from app.db.database_menagers.database_manager_base import DatabaseManagerBase
-from app.db.models.fighters import Fighters
 from app.schemas.fighter import FighterFilter
 from app.tools.logger import logger
 

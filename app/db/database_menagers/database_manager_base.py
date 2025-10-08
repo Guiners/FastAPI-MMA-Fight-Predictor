@@ -1,6 +1,6 @@
-from typing import List, Union
+from typing import Union
 
-from sqlalchemy import CursorResult, delete, insert, select, text
+from sqlalchemy import select, text
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import joinedload
 
@@ -18,7 +18,6 @@ EXTENDED_STMT = select(Fighters).options(
     joinedload(Fighters.extended_stats),
     joinedload(Fighters.fights_results),
 )
-# todo split it to DatabaseManagerGetter? i DatabaseManagerUpdater czy cos
 
 
 class DatabaseManagerBase:
