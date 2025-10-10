@@ -9,7 +9,6 @@ from sqlalchemy.sql import func
 from app.db.models.base import Base
 
 if TYPE_CHECKING:
-    from .extended_stats import ExtendedStats
     from .fighters import Fighters
 
 
@@ -43,6 +42,3 @@ class BaseStats(Base):
     fighter: Mapped["Fighters"] = relationship(
         back_populates="base_stats", uselist=False
     )
-    # extended_stats: Mapped["ExtendedStats"] = relationship(
-    #     back_populates="base_stats", uselist=False
-    # )

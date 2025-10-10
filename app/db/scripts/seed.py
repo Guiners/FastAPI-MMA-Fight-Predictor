@@ -7,6 +7,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db.constants import example_data_paths
 from app.db.database import get_db
+from app.db.database_menagers.fighters_database_managers.fighter_database_manager_base import \
+    DatabaseManagerBase
 from app.tools.logger import logger
 
 LAST_FIGHT_DATE = "last_fight_date"
@@ -68,7 +70,7 @@ class TableFiller:
 
 async def main():
     async for mma_db in get_db():
-        # await TableFiller.clear_tables(mma_db)
+        await DatabaseManagerBase(mma_db, False).clear_all_tables()
         await TableFiller.fill_database_with_data(mma_db, example_data_paths)
 
 

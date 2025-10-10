@@ -14,7 +14,7 @@
     "weight": 113,
     "height": 196,
     "reach": 198,
-    "age": 31,
+    "age": 31
   },
   "extended_stats": {
     "stance": "Orthodox",
@@ -25,7 +25,7 @@
     "td_avg": 4.0,
     "td_acc": 100,
     "td_def": 75,
-    "sub_avg": 1.0,
+    "sub_avg": 1.0
   },
   "fights_results": {
     "win_by_ko_tko": 10,
@@ -34,11 +34,13 @@
     "loss_by_sub": 0,
     "win_by_dec": 1,
     "loss_by_dec": 2,
-    "non_contest": 0,
+    "non_contest": 0
   }
 }
 
-
+   "name": "fddsfsdg",
+    "nickname": "gsdsfsd",
+    "surname": "sfsdfsf",
 {
   "name": "Charles",
   "nickname": "Do Bronx",

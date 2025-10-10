@@ -12,6 +12,10 @@ pydantic = "*"
 alembic = "*"
 dotenv = "*"
 asyncpg = "*"
+python-jose = {extras = ["cryptography"], version = "*"}
+passlib = {extras = ["bcryp"], version = "*"}
+python-multipart = "*"
+bcrypt = "4.3.0"
 
 [dev-packages]
 pytest = "*"

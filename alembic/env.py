@@ -9,6 +9,7 @@ from app.db.models.base_stats import BaseStats
 from app.db.models.extended_stats import ExtendedStats
 from app.db.models.fighters import Fighters
 from app.db.models.fights_results import FightsResults
+from app.db.models.users import Users
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
