@@ -2,7 +2,8 @@ from typing import List, Union
 
 from sqlalchemy import delete
 
-from app.db.database_menagers.database_manager_base import DatabaseManagerBase
+from app.db.database_menagers.fighters_database_managers.fighter_database_manager_base import \
+    DatabaseManagerBase
 from app.db.models.fighters import Fighters
 from app.schemas.extended_fighter import ExtendedFighterFilter
 from app.schemas.fighter import FighterFilter
@@ -13,7 +14,7 @@ class DatabaseManagerUpdater(DatabaseManagerBase):
     async def add_fighter(
         self, fighter_data: Union[FighterFilter, ExtendedFighterFilter]
     ) -> bool:
-        data = fighter_data.dict(exclude_none=True)
+        data = fighter_data.model_dump(exclude_none=True)
         if self.is_extended:
             self.convert_stats_dicts_to_models(data)
         self.db.add(Fighters(**data))
@@ -25,7 +26,7 @@ class DatabaseManagerUpdater(DatabaseManagerBase):
     ):
         fighters_to_add = []
         for fighter_data in fighters_data:
-            data = fighter_data.dict(exclude_none=True)
+            data = fighter_data.model_dump(exclude_none=True)
             if self.is_extended:
                 self.convert_stats_dicts_to_models(data)
             fighters_to_add.append(Fighters(**data))
@@ -37,7 +38,7 @@ class DatabaseManagerUpdater(DatabaseManagerBase):
         return [True for _ in fighters_to_add]
 
     async def _update_fighter(self, fighter, fighter_data: FighterFilter):
-        data = fighter_data.dict(exclude_none=True)
+        data = fighter_data.model_dump(exclude_none=True)
 
         if self.is_extended:
             self.convert_stats_dicts_to_models(data)

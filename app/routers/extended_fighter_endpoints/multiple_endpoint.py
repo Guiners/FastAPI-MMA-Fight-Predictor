@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db.database import get_db
-from app.db.database_menagers.database_manager_updater import \
+from app.db.database_menagers.fighters_database_managers.fighter_database_manager_updater import \
     DatabaseManagerUpdater
 from app.schemas.extended_fighter import ExtendedFighterFilter
 from app.tools.tools import handle_empty_response

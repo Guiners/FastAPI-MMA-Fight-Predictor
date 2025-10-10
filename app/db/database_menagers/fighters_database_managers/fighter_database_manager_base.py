@@ -21,7 +21,7 @@ EXTENDED_STMT = select(Fighters).options(
 
 
 class DatabaseManagerBase:
-    def __init__(self, db: AsyncSession, extended: bool):
+    def __init__(self, db: AsyncSession, extended: bool = False):
         self.db = db
         self.is_extended = extended
         self.stmt = EXTENDED_STMT if extended else BASE_STMT
@@ -29,7 +29,7 @@ class DatabaseManagerBase:
 
     @staticmethod
     def build_where_stmt(filters: Union[FighterFilter, ExtendedFighterFilter]):
-        filters_dict = filters.dict(exclude_none=True)
+        filters_dict = filters.model_dump(exclude_none=True)
         logger.debug(f"fighter filter: {filters_dict}")
         where_stmt = []
         for field, value in filters_dict.items():
