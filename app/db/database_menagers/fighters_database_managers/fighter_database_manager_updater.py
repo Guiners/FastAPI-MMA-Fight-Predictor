@@ -2,8 +2,9 @@ from typing import List, Union
 
 from sqlalchemy import delete
 
-from app.db.database_menagers.fighters_database_managers.fighter_database_manager_base import \
-    DatabaseManagerBase
+from app.db.database_menagers.fighters_database_managers.fighter_database_manager_base import (
+    DatabaseManagerBase,
+)
 from app.db.models.fighters import Fighters
 from app.schemas.extended_fighter import ExtendedFighterFilter
 from app.schemas.fighter import FighterFilter

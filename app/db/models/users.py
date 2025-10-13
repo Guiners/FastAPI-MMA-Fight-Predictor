@@ -11,7 +11,6 @@ class Users(Base):
     __tablename__ = "users"
     user_id: Mapped[int] = mapped_column(
         Integer,
-        ForeignKey("users.user_id", ondelete="CASCADE"),
         autoincrement=True,
         primary_key=True,
         unique=True,

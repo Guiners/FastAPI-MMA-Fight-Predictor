@@ -1,5 +1,6 @@
-from app.db.database_menagers.fighters_database_managers.fighter_database_manager_base import \
-    DatabaseManagerBase
+from app.db.database_menagers.fighters_database_managers.fighter_database_manager_base import (
+    DatabaseManagerBase,
+)
 from app.schemas.fighter import FighterFilter
 from app.tools.logger import logger
 

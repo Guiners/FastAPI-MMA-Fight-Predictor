@@ -4,20 +4,25 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db.database import get_db
-from app.db.database_menagers.fighters_database_managers.fighter_database_manager_getter import \
-    DatabaseManagerGetter
-from app.db.database_menagers.fighters_database_managers.fighter_database_manager_updater import \
-    DatabaseManagerUpdater
-from app.routers.extended_fighter_endpoints.country_endpoints import \
-    extended_country_router
-from app.routers.extended_fighter_endpoints.fighter_details_endpoints import \
-    extended_fighter_details_router
-from app.routers.extended_fighter_endpoints.id_endpoints import \
-    extended_id_router
-from app.routers.extended_fighter_endpoints.multiple_endpoint import \
-    extended_multiple_router
-from app.routers.extended_fighter_endpoints.search_endpoints import \
-    extended_search_router
+from app.db.database_menagers.fighters_database_managers.fighter_database_manager_getter import (
+    DatabaseManagerGetter,
+)
+from app.db.database_menagers.fighters_database_managers.fighter_database_manager_updater import (
+    DatabaseManagerUpdater,
+)
+from app.routers.extended_fighter_endpoints.country_endpoints import (
+    extended_country_router,
+)
+from app.routers.extended_fighter_endpoints.fighter_details_endpoints import (
+    extended_fighter_details_router,
+)
+from app.routers.extended_fighter_endpoints.id_endpoints import extended_id_router
+from app.routers.extended_fighter_endpoints.multiple_endpoint import (
+    extended_multiple_router,
+)
+from app.routers.extended_fighter_endpoints.search_endpoints import (
+    extended_search_router,
+)
 from app.schemas import ExtendedFighter as ExtendedFighterSchema
 from app.schemas.extended_fighter import ExtendedFighterFilter
 from app.tools.tools import handle_empty_response
