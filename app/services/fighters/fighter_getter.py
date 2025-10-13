@@ -1,11 +1,11 @@
-from app.db.database_menagers.fighters_database_managers.fighter_database_manager_base import (
-    DatabaseManagerBase,
+from app.services.fighters.fighter_utils import (
+    FighterUtils,
 )
 from app.schemas.fighter import FighterFilter
 from app.tools.logger import logger
 
 
-class DatabaseManagerGetter(DatabaseManagerBase):
+class FighterGetter(FighterUtils):
 
     # todo typing
     async def get_all_fighters_records(self):

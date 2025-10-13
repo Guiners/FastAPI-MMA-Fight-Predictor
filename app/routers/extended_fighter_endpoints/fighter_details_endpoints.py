@@ -2,11 +2,11 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db.database import get_db
-from app.db.database_menagers.fighters_database_managers.fighter_database_manager_getter import (
-    DatabaseManagerGetter,
+from app.services.fighters.fighter_getter import (
+    FighterGetter,
 )
-from app.db.database_menagers.fighters_database_managers.fighter_database_manager_updater import (
-    DatabaseManagerUpdater,
+from app.services.fighters.fighter_updater import (
+    FighterUpdater,
 )
 from app.schemas import ExtendedFighter as ExtendedFighterSchema
 from app.schemas.extended_fighter import ExtendedFighterFilter
@@ -24,9 +24,9 @@ IS_EXTENDED = True
 async def get_extended_fighter_by_name_nickname_surname(
     name: str, nickname: str, surname: str, db: AsyncSession = Depends(get_db)
 ) -> ExtendedFighterSchema:
-    return await DatabaseManagerGetter(
-        db, IS_EXTENDED
-    ).get_fighter_by_name_nickname_surname(name, nickname, surname)
+    return await FighterGetter(db, IS_EXTENDED).get_fighter_by_name_nickname_surname(
+        name, nickname, surname
+    )
 
 
 @extended_fighter_details_router.put(
@@ -40,6 +40,6 @@ async def update_extended_fighter_by_name(
     fighter_data: ExtendedFighterFilter,
     db: AsyncSession = Depends(get_db),
 ):
-    return await DatabaseManagerUpdater(
+    return await FighterUpdater(
         db, IS_EXTENDED
     ).update_fighter_by_name_nickname_surname(name, nickname, surname, fighter_data)

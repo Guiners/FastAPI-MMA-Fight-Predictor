@@ -4,9 +4,7 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db.database import get_db
-from app.db.database_menagers.fighters_database_managers.fighter_database_manager_getter import (
-    DatabaseManagerGetter,
-)
+from app.services.fighters.fighter_getter import FighterGetter
 from app.schemas import ExtendedFighter as ExtendedFighterSchema
 from app.schemas.fighter import FighterFilter
 from app.tools.tools import handle_empty_response
@@ -21,6 +19,4 @@ IS_EXTENDED = True
 async def search_fighters(
     fighter_filters: FighterFilter = Depends(), db: AsyncSession = Depends(get_db)
 ) -> Union[List[ExtendedFighterSchema], ExtendedFighterSchema]:
-    return await DatabaseManagerGetter(db, IS_EXTENDED).search_extended_fighter(
-        fighter_filters
-    )
+    return await FighterGetter(db, IS_EXTENDED).search_extended_fighter(fighter_filters)

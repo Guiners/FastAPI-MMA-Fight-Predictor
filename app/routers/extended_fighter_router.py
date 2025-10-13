@@ -4,12 +4,10 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db.database import get_db
-from app.db.database_menagers.fighters_database_managers.fighter_database_manager_getter import (
-    DatabaseManagerGetter,
+from app.services.fighters.fighter_getter import (
+    FighterGetter,
 )
-from app.db.database_menagers.fighters_database_managers.fighter_database_manager_updater import (
-    DatabaseManagerUpdater,
-)
+from app.services.fighters.fighter_updater import FighterUpdater
 from app.routers.extended_fighter_endpoints.country_endpoints import (
     extended_country_router,
 )
@@ -43,11 +41,11 @@ IS_EXTENDED = True
 async def get_all_extended_fighters_list(
     db: AsyncSession = Depends(get_db),
 ) -> List[ExtendedFighterSchema]:
-    return await DatabaseManagerGetter(db, IS_EXTENDED).get_all_fighters_records()
+    return await FighterGetter(db, IS_EXTENDED).get_all_fighters_records()
 
 
 @extended_fighter_router.post("")
 async def create_extended_fighter(
     fighter_data: ExtendedFighterFilter, db: AsyncSession = Depends(get_db)
 ):
-    return await DatabaseManagerUpdater(db, IS_EXTENDED).add_fighter(fighter_data)
+    return await FighterUpdater(db, IS_EXTENDED).add_fighter(fighter_data)

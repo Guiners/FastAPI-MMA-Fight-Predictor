@@ -5,9 +5,9 @@ from pathlib import Path
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.db.constants import example_data_paths
+from app.constants import example_data_paths
 from app.db.database import get_db
-from app.db.database_menagers.fighters_database_managers.fighter_database_manager_base import (
+from app.services.fighters import (
     DatabaseManagerBase,
 )
 from app.tools.logger import logger

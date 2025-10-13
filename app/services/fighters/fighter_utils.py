@@ -20,7 +20,7 @@ EXTENDED_STMT = select(Fighters).options(
 )
 
 
-class DatabaseManagerBase:
+class FighterUtils:
     def __init__(self, db: AsyncSession, extended: bool = False):
         self.db = db
         self.is_extended = extended

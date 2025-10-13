@@ -9,3 +9,7 @@ example_data_paths = {
     ExtendedStats: "./app/db/example_data/extended_stats.json",
     FightsResults: "./app/db/example_data/fights_results.json",
 }
+
+version = "v1"
+
+PREFIX = f"/api/{version}"

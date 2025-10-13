@@ -27,6 +27,8 @@ htpp_exceptions np - custom exceptions mozna sb napisac
 
 logowanie z tokenem z lifespanem i sprawdzenie uprawnien i expirowanie tokena
 
+dodad ANNOTATED FighterId = Annotated[int, Path(..., gt=0)]
+
 
 kazac copilotowi przeanalizowac wymagania peexa
 
