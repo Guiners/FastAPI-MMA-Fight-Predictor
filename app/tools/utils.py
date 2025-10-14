@@ -4,6 +4,7 @@ from typing import Optional
 from fastapi import HTTPException, Request
 from pydantic import ValidationError, create_model
 
+from app.tools.exceptions.custom_api_exceptions import NotFoundException
 from app.tools.logger import logger
 
 
@@ -19,15 +20,12 @@ def handle_empty_response(func):
 
             elif not response or None in response or response == []:
                 logger.error("Fighter/Fighters not found")
-                # todo przerobic to
-                raise HTTPException(
-                    status_code=404, detail="Fighter/Fighters not found"
-                )
+                raise NotFoundException
             return response
 
         except Exception as e:
             logger.error(e)
-            raise HTTPException(status_code=404, detail="Fighter/Fighters not found")
+            raise NotFoundException
 
     return wrapper
 

@@ -1,6 +1,6 @@
 from typing import List, Union
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db.database import get_db
@@ -14,7 +14,7 @@ extended_search_router = APIRouter(prefix="/search")
 IS_EXTENDED = True
 
 
-@extended_search_router.get("")
+@extended_search_router.get("", status_code=status.HTTP_200_OK)
 @handle_empty_response
 async def search_fighters(
     fighter_filters: FighterFilter = Depends(), db: AsyncSession = Depends(get_db)

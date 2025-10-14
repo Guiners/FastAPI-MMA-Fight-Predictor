@@ -16,7 +16,7 @@ async def create_user(
     return await AuthService(db).create_user(user_filter)
 
 
-@auth_router.get("")
+@auth_router.get("", status_code=status.HTTP_200_OK)
 # @handle_empty_response
 async def get_all_users(
     db: AsyncSession = Depends(get_db),

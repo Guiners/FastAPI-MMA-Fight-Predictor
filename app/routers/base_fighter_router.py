@@ -1,6 +1,6 @@
 from typing import List
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db.database import get_db
@@ -34,7 +34,7 @@ base_fighter_router.include_router(base_multiple_router)
 IS_EXTENDED = False
 
 
-@base_fighter_router.get("")
+@base_fighter_router.get("", status_code=status.HTTP_200_OK)
 @handle_empty_response
 async def get_all_base_fighters_list(
     db: AsyncSession = Depends(get_db),
@@ -42,7 +42,7 @@ async def get_all_base_fighters_list(
     return await FighterGetter(db, IS_EXTENDED).get_all_fighters_records()
 
 
-@base_fighter_router.post("")
+@base_fighter_router.post("", status_code=status.HTTP_201_CREATED)
 async def create_base_fighter(
     fighter_data: FighterFilter = Depends(), db: AsyncSession = Depends(get_db)
 ):

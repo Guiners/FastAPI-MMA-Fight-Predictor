@@ -1,6 +1,6 @@
 from typing import List, Union
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db.database import get_db
@@ -13,7 +13,7 @@ extended_country_router = APIRouter(prefix="/country")
 IS_EXTENDED = True
 
 
-@extended_country_router.get("/{country}")
+@extended_country_router.get("/{country}", status_code=status.HTTP_200_OK)
 @handle_empty_response
 async def get_extended_fighters_by_country(
     country: str, db: AsyncSession = Depends(get_db)

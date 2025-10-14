@@ -10,6 +10,7 @@ from app.db.database import get_db
 from app.services.fighters import (
     DatabaseManagerBase,
 )
+from app.tools.exceptions.custom_api_exceptions import InternalServerError
 from app.tools.logger import logger
 
 LAST_FIGHT_DATE = "last_fight_date"
@@ -61,7 +62,7 @@ class TableFiller:
         except Exception as e:
             logger.error(f"An error occurred during database seeding: {e}")
             await db.rollback()
-            raise
+            raise InternalServerError
 
     @staticmethod
     def fix_data_column(data, column_name: str, _format: str = "%Y-%m-%d"):

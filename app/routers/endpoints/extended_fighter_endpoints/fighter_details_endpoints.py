@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db.database import get_db
@@ -18,7 +18,7 @@ IS_EXTENDED = True
 
 
 @extended_fighter_details_router.get(
-    "/name/{name}/nickname/{nickname}/surname/{surname}"
+    "/name/{name}/nickname/{nickname}/surname/{surname}", status_code=status.HTTP_200_OK
 )
 @handle_empty_response
 async def get_extended_fighter_by_name_nickname_surname(
@@ -30,7 +30,8 @@ async def get_extended_fighter_by_name_nickname_surname(
 
 
 @extended_fighter_details_router.put(
-    "/name/{name}/nickname/{nickname}/surname/{surname}"
+    "/name/{name}/nickname/{nickname}/surname/{surname}",
+    status_code=status.HTTP_202_ACCEPTED,
 )
 @handle_empty_response
 async def update_extended_fighter_by_name(

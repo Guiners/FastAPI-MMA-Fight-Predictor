@@ -17,6 +17,10 @@ from app.schemas.users import User as UserSchema
 from app.schemas.users import UserFilter
 from app.tools import logger
 from app.constants import PREFIX
+from app.tools.exceptions.custom_api_exceptions import (
+    UnauthorizedException,
+    NotFoundException,
+)
 
 secret_key = "83489hfyy46457943095789cf4879f3890"
 algorith = "HS256"
@@ -40,15 +44,13 @@ class AuthService:
             user_id: int = payload.get("id")
 
             if user_id is None or email is None:
-                raise
+                raise NotFoundException
 
             return {"email": email, "id": user_id}
 
         except Exception as e:
             logger.error(f"JTW ERROR: {e}")
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token"
-            )
+            raise UnauthorizedException
 
     async def create_user(self, user_filter: UserFilter):
         try:
@@ -76,21 +78,15 @@ class AuthService:
         )
         user = records.scalar_one_or_none()
         if not user:
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token"
-            )
+            raise UnauthorizedException
 
         try:
             if not bcrypt_context.verify(user_filter.password, user.hashed_password):
-                raise HTTPException(
-                    status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token"
-                )
+                raise UnauthorizedException
 
         except Exception as e:
             logger.error(f"Logging error:{e}")
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token"
-            )
+            raise UnauthorizedException
 
         return user
 

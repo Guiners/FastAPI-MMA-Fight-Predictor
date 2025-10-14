@@ -11,7 +11,7 @@ from app.services.auth import AuthService
 
 from app.constants import PREFIX, version
 from app.tools.exception_handlers import register_exception_handlers
-
+from app.tools.exceptions.custom_api_exceptions import UnauthorizedException
 
 app = FastAPI(version=version)
 
@@ -32,8 +32,6 @@ async def user(
     user: dict = Depends(AuthService.get_current_user),
 ):
     if user is None:
-        raise status.HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token"
-        )
+        raise UnauthorizedException
 
     return {"User": user}

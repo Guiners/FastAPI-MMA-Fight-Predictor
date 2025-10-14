@@ -15,8 +15,7 @@ docker exec -it app alembic upgrade head
 docker exec -it app python app/db/scripts/seed.py
 
 TODO:
-
-dodac response http typu 200 itd
+ogarnac to annotated
 
 logowanie z tokenem z lifespanem i sprawdzenie uprawnien i expirowanie tokena
 

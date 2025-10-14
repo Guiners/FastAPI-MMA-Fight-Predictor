@@ -1,6 +1,6 @@
 from typing import List
 
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Depends, Query, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db.database import get_db
@@ -15,14 +15,14 @@ extended_multiple_router = APIRouter(prefix="/multiple")
 IS_EXTENDED = True
 
 
-@extended_multiple_router.post("")
+@extended_multiple_router.post("", status_code=status.HTTP_201_CREATED)
 async def create_multiple_extended_fighter(
     fighters_data: List[ExtendedFighterFilter], db: AsyncSession = Depends(get_db)
 ):
     return await FighterUpdater(db, IS_EXTENDED).add_multiple_fighters(fighters_data)
 
 
-@extended_multiple_router.delete("")
+@extended_multiple_router.delete("", status_code=status.HTTP_200_OK)
 @handle_empty_response
 async def delete_multiple_extended_fighter(
     list_of_ids: List[int] = Query, db: AsyncSession = Depends(get_db)
