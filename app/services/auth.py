@@ -1,7 +1,7 @@
 import os
 from datetime import datetime, timedelta
 
-from fastapi import Depends
+from fastapi import Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer
 from jose import jwt, JWTError
 from passlib.context import CryptContext
@@ -46,7 +46,7 @@ class AuthService:
 
         except Exception as e:
             logger.error(f"JTW ERROR: {e}")
-            raise status.HTTPException(
+            raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token"
             )
 
@@ -76,19 +76,19 @@ class AuthService:
         )
         user = records.scalar_one_or_none()
         if not user:
-            raise status.HTTPException(
+            raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token"
             )
 
         try:
             if not bcrypt_context.verify(user_filter.password, user.hashed_password):
-                raise status.HTTPException(
+                raise HTTPException(
                     status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token"
                 )
 
         except Exception as e:
             logger.error(f"Logging error:{e}")
-            raise status.HTTPException(
+            raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token"
             )
 

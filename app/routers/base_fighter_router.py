@@ -10,15 +10,19 @@ from app.services.fighters.fighter_getter import (
 from app.services.fighters.fighter_updater import (
     FighterUpdater,
 )
-from app.routers.base_fighter_endpoints.country_endpoints import base_country_router
-from app.routers.base_fighter_endpoints.fighter_details_endpoints import (
+from app.routers.endpoints.base_fighter_endpoints.country_endpoints import (
+    base_country_router,
+)
+from app.routers.endpoints.base_fighter_endpoints.fighter_details_endpoints import (
     base_fighter_details_router,
 )
-from app.routers.base_fighter_endpoints.id_endpoints import base_id_router
-from app.routers.base_fighter_endpoints.multiple_endpoint import base_multiple_router
+from app.routers.endpoints.base_fighter_endpoints.id_endpoints import base_id_router
+from app.routers.endpoints.base_fighter_endpoints.multiple_endpoint import (
+    base_multiple_router,
+)
 from app.schemas.fighter import Fighter as FighterSchema
 from app.schemas.fighter import FighterFilter
-from app.tools.tools import handle_empty_response
+from app.tools.utils import handle_empty_response
 
 base_fighter_router = APIRouter(prefix="/base_fighter")
 

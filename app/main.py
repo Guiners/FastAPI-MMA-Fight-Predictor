@@ -10,6 +10,8 @@ from app.db.database import get_db
 from app.services.auth import AuthService
 
 from app.constants import PREFIX, version
+from app.tools.exception_handlers import register_exception_handlers
+
 
 app = FastAPI(version=version)
 
@@ -17,7 +19,7 @@ app.middleware("http")(log_requests)
 app.include_router(base_fighter_router, prefix=PREFIX)
 app.include_router(extended_fighter_router, prefix=PREFIX)
 app.include_router(auth_router, prefix=PREFIX)
-
+register_exception_handlers(app)
 
 # @app.get("/")
 # async def root():
@@ -26,7 +28,7 @@ app.include_router(auth_router, prefix=PREFIX)
 
 @app.get("/", response_model=None)
 async def user(
-    db: AsyncSession = Depends(get_db),
+    # db: AsyncSession = Depends(get_db),
     user: dict = Depends(AuthService.get_current_user),
 ):
     if user is None:

@@ -8,7 +8,7 @@ from app.services.fighters.fighter_getter import (
     FighterGetter,
 )
 from app.schemas.fighter import Fighter as FighterSchema
-from app.tools.tools import handle_empty_response
+from app.tools.utils import handle_empty_response
 
 base_country_router = APIRouter(prefix="/country")
 

@@ -8,36 +8,32 @@ from app.services.fighters.fighter_getter import (
 from app.services.fighters.fighter_updater import (
     FighterUpdater,
 )
-from app.schemas import ExtendedFighter as ExtendedFighterSchema
-from app.schemas.extended_fighter import ExtendedFighterFilter
-from app.tools.tools import handle_empty_response
+from app.schemas.fighter import Fighter as FighterSchema
+from app.schemas.fighter import FighterFilter
+from app.tools.utils import handle_empty_response
 
-extended_fighter_details_router = APIRouter(prefix="/fighter_details")
+base_fighter_details_router = APIRouter(prefix="/fighter_details")
 
-IS_EXTENDED = True
+IS_EXTENDED = False
 
 
-@extended_fighter_details_router.get(
-    "/name/{name}/nickname/{nickname}/surname/{surname}"
-)
+@base_fighter_details_router.get("/name/{name}/nickname/{nickname}/surname/{surname}")
 @handle_empty_response
-async def get_extended_fighter_by_name_nickname_surname(
+async def get_base_fighter_by_name_nickname_surname(
     name: str, nickname: str, surname: str, db: AsyncSession = Depends(get_db)
-) -> ExtendedFighterSchema:
+) -> FighterSchema:
     return await FighterGetter(db, IS_EXTENDED).get_fighter_by_name_nickname_surname(
         name, nickname, surname
     )
 
 
-@extended_fighter_details_router.put(
-    "/name/{name}/nickname/{nickname}/surname/{surname}"
-)
+@base_fighter_details_router.put("/name/{name}/nickname/{nickname}/surname/{surname}")
 @handle_empty_response
-async def update_extended_fighter_by_name(
+async def update_base_fighter_by_name(
     name: str,
     nickname: str,
     surname: str,
-    fighter_data: ExtendedFighterFilter,
+    fighter_data: FighterFilter = Depends(),
     db: AsyncSession = Depends(get_db),
 ):
     return await FighterUpdater(

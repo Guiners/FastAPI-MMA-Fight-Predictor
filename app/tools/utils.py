@@ -10,6 +10,7 @@ from app.tools.logger import logger
 def handle_empty_response(func):
     @wraps(func)
     async def wrapper(*args, **kwargs):
+
         try:
             response = await func(*args, **kwargs)
 
@@ -18,6 +19,7 @@ def handle_empty_response(func):
 
             elif not response or None in response or response == []:
                 logger.error("Fighter/Fighters not found")
+                # todo przerobic to
                 raise HTTPException(
                     status_code=404, detail="Fighter/Fighters not found"
                 )

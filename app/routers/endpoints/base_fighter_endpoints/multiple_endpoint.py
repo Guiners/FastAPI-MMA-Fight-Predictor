@@ -8,7 +8,7 @@ from app.services.fighters.fighter_updater import (
     FighterUpdater,
 )
 from app.schemas.fighter import FighterFilter
-from app.tools.tools import handle_empty_response
+from app.tools.utils import handle_empty_response
 
 base_multiple_router = APIRouter(prefix="/multiple")
 

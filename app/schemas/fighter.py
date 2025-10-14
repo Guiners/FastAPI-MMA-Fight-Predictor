@@ -3,7 +3,7 @@ from typing import Optional
 
 from pydantic import BaseModel, create_model
 
-from app.tools.tools import create_filter_schema
+from app.tools.utils import create_filter_schema
 
 
 class Fighter(BaseModel):

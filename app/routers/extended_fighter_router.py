@@ -8,22 +8,24 @@ from app.services.fighters.fighter_getter import (
     FighterGetter,
 )
 from app.services.fighters.fighter_updater import FighterUpdater
-from app.routers.extended_fighter_endpoints.country_endpoints import (
+from app.routers.endpoints.extended_fighter_endpoints.country_endpoints import (
     extended_country_router,
 )
-from app.routers.extended_fighter_endpoints.fighter_details_endpoints import (
+from app.routers.endpoints.extended_fighter_endpoints.fighter_details_endpoints import (
     extended_fighter_details_router,
 )
-from app.routers.extended_fighter_endpoints.id_endpoints import extended_id_router
-from app.routers.extended_fighter_endpoints.multiple_endpoint import (
+from app.routers.endpoints.extended_fighter_endpoints.id_endpoints import (
+    extended_id_router,
+)
+from app.routers.endpoints.extended_fighter_endpoints.multiple_endpoint import (
     extended_multiple_router,
 )
-from app.routers.extended_fighter_endpoints.search_endpoints import (
+from app.routers.endpoints.extended_fighter_endpoints.search_endpoints import (
     extended_search_router,
 )
 from app.schemas import ExtendedFighter as ExtendedFighterSchema
 from app.schemas.extended_fighter import ExtendedFighterFilter
-from app.tools.tools import handle_empty_response
+from app.tools.utils import handle_empty_response
 
 extended_fighter_router = APIRouter(prefix="/extended_fighter")
 
