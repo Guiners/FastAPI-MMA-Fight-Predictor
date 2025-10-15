@@ -2,15 +2,19 @@
 -- zaloguj się jako postgres (domyślny superuser)
 psql -U postgres -d postgres
 
-docker compose down -v   - usuniecie volumena
+docker compose down -v  - usuniecie volumena
 
-docker compose up --build - stworzenie wolumenow
+docker compose up --build  - stworzenie wolumenow
 
 docker exec -it db psql -U admin -d mma_db - z terminalu lacze sie do bazy
 
 docker exec -it app alembic revision --autogenerate -m "Initial tables" - odpalanie alembica
 
 docker exec -it app alembic upgrade head
+
+
+
+
 
 test data:
 
