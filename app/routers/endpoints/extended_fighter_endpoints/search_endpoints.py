@@ -1,12 +1,12 @@
-from typing import List, Union
+import typing
 
 from fastapi import APIRouter, Depends, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db.database import get_db
-from app.services.fighters.fighter_getter import FighterGetter
 from app.schemas import ExtendedFighter as ExtendedFighterSchema
 from app.schemas.fighter import FighterFilter
+from app.services.fighters.fighter_getter import FighterGetter
 from app.tools.utils import handle_empty_response
 
 extended_search_router = APIRouter(prefix="/search")
@@ -18,5 +18,5 @@ IS_EXTENDED = True
 @handle_empty_response
 async def search_fighters(
     fighter_filters: FighterFilter = Depends(), db: AsyncSession = Depends(get_db)
-) -> Union[List[ExtendedFighterSchema], ExtendedFighterSchema]:
+) -> typing.List[ExtendedFighterSchema]|ExtendedFighterSchema:
     return await FighterGetter(db, IS_EXTENDED).search_extended_fighter(fighter_filters)

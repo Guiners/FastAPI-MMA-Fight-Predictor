@@ -13,3 +13,5 @@ example_data_paths = {
 version = "v1"
 
 PREFIX = f"/api/{version}"
+
+MODELS_LIST = [Fighters, BaseStats, ExtendedStats, FightsResults]

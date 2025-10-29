@@ -3,8 +3,8 @@ from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db.database import get_db
-from app.services.auth import AuthService
 from app.schemas.users import UserFilter
+from app.services.auth import AuthService
 
 auth_router = APIRouter(prefix="/auth")
 

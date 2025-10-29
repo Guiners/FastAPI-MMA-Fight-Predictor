@@ -2,14 +2,13 @@ from fastapi import Depends, FastAPI
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
+from app.constants import PREFIX, version
+from app.db.database import get_db
 from app.middleware.middlewares import log_requests
 from app.routers.auth_router import auth_router
 from app.routers.base_fighter_router import base_fighter_router
 from app.routers.extended_fighter_router import extended_fighter_router
-from app.db.database import get_db
 from app.services.auth import AuthService
-
-from app.constants import PREFIX, version
 from app.tools.exception_handlers import register_exception_handlers
 from app.tools.exceptions.custom_api_exceptions import UnauthorizedException
 

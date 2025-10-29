@@ -1,9 +1,8 @@
-from typing import Union
-
-from sqlalchemy import select, text
+from sqlalchemy import asc, desc, func, select, text
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm import joinedload
+from sqlalchemy.orm import aliased, joinedload
 
+from app.constants import MODELS_LIST
 from app.db.models import Base, BaseStats, ExtendedStats, FightsResults
 from app.db.models.fighters import Fighters
 from app.schemas import ExtendedFighter as ExtendedFighterSchema
@@ -13,10 +12,21 @@ from app.schemas.fighter import FighterFilter
 from app.tools.logger import logger
 
 BASE_STMT = select(Fighters)
-EXTENDED_STMT = select(Fighters).options(
-    joinedload(Fighters.base_stats),
-    joinedload(Fighters.extended_stats),
-    joinedload(Fighters.fights_results),
+# EXTENDED_STMT = select(Fighters).options(
+#     joinedload(Fighters.base_stats),
+#     joinedload(Fighters.extended_stats),
+#     joinedload(Fighters.fights_results),
+# )
+EXTENDED_STMT = (
+    select(Fighters)
+    .join(BaseStats, Fighters.fighter_id == BaseStats.fighter_id, isouter=True)
+    .join(ExtendedStats, Fighters.fighter_id == ExtendedStats.fighter_id, isouter=True)
+    .join(FightsResults, Fighters.fighter_id == FightsResults.fighter_id, isouter=True)
+    .options(
+        joinedload(Fighters.base_stats),
+        joinedload(Fighters.extended_stats),
+        joinedload(Fighters.fights_results),
+    )
 )
 
 
@@ -28,7 +38,7 @@ class FighterUtils:
         self.fighter_schema = ExtendedFighterSchema if extended else FighterSchema
 
     @staticmethod
-    def build_where_stmt(filters: Union[FighterFilter, ExtendedFighterFilter]):
+    def build_where_stmt(filters: FighterFilter|ExtendedFighterFilter):
         filters_dict = filters.model_dump(exclude_none=True)
         logger.debug(f"fighter filter: {filters_dict}")
         where_stmt = []
@@ -64,7 +74,7 @@ class FighterUtils:
 
     # todo typing
     async def _get_records_by_single_value(
-        self, column: str, value: Union[str, int], validate: bool = True
+        self, column: str, value: str| int, validate: bool = True
     ):
         column_attr = getattr(Fighters, column)
         return await self._get_records_with_where_stmt([column_attr == value], validate)
@@ -78,6 +88,54 @@ class FighterUtils:
             Fighters.surname == surname,
         ]
         return await self._get_records_with_where_stmt(where_stmt, validate)
+
+    async def get_fighters_by_param_with_limit(
+        self, param_name: str, limit: int, order: str = "desc"
+    ):
+        column, _ = self._get_column_if_param_in_tables(param_name)
+
+        order_func = desc if order.lower() == "desc" else asc
+        result = await self.db.execute(
+            self.stmt.order_by(order_func(column)).limit(limit)
+        )
+        return result.scalars().all()
+
+    @staticmethod
+    def _get_column_if_param_in_tables(param_name: str):
+        for model in MODELS_LIST:
+            if hasattr(model, param_name):
+                return getattr(model, param_name), model
+        raise ValueError(f"Invalid column name: {param_name}")
+
+    async def get_grouped_stat(
+        self,
+        param_name1: str,
+        param_name2: str,
+        math_func1,
+        math_func2=func.count,
+        label1="stat",
+        label2="count",
+    ):
+        column1, model1 = self._get_column_if_param_in_tables(param_name1)
+        column2, model2 = self._get_column_if_param_in_tables(param_name2)
+
+        if model1 == model2:
+            model2 = aliased(model2)
+
+        stmt = (
+            select(
+                column1,
+                math_func1(column2).label(label1),
+                math_func2(model1.fighter_id).label(label2),
+            )
+            .join(model2, model1.fighter_id == model2.fighter_id)
+            .group_by(column1)
+            .having(math_func2(model1.fighter_id) > 1)
+            .order_by(math_func1(column2).desc())
+        )
+
+        result = await self.db.execute(stmt)
+        return result.mappings().all()
 
     async def clear_all_tables(self) -> None:
         meta = Base.metadata

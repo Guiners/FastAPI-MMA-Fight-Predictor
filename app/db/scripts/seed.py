@@ -7,9 +7,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.constants import example_data_paths
 from app.db.database import get_db
-from app.services.fighters import (
-    DatabaseManagerBase,
-)
+from app.services.fighters import DatabaseManagerBase
 from app.tools.exceptions.custom_api_exceptions import InternalServerError
 from app.tools.logger import logger
 

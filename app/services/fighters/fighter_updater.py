@@ -1,19 +1,16 @@
-from typing import List, Union
-
+import typing
 from sqlalchemy import delete
 
-from app.services.fighters.fighter_utils import (
-    FighterUtils,
-)
 from app.db.models.fighters import Fighters
 from app.schemas.extended_fighter import ExtendedFighterFilter
 from app.schemas.fighter import FighterFilter
+from app.services.fighters.fighter_utils import FighterUtils
 
 
 class FighterUpdater(FighterUtils):
 
     async def add_fighter(
-        self, fighter_data: Union[FighterFilter, ExtendedFighterFilter]
+        self, fighter_data: FighterFilter|ExtendedFighterFilter
     ) -> bool:
         data = fighter_data.model_dump(exclude_none=True)
         if self.is_extended:
@@ -23,7 +20,7 @@ class FighterUpdater(FighterUtils):
         return True
 
     async def add_multiple_fighters(
-        self, fighters_data: List[Union[FighterFilter, ExtendedFighterFilter]]
+        self, fighters_data: typing.List[FighterFilter|ExtendedFighterFilter]
     ):
         fighters_to_add = []
         for fighter_data in fighters_data:
@@ -73,7 +70,7 @@ class FighterUpdater(FighterUtils):
             return True
         return None
 
-    async def remove_multiple_records(self, list_of_ids: List[int]):
+    async def remove_multiple_records(self, list_of_ids: typing.List[int]):
         if not list_of_ids:
             return []
         stmt = delete(Fighters).where(Fighters.fighter_id.in_(list_of_ids))

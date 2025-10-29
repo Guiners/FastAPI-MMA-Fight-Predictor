@@ -2,14 +2,10 @@ from fastapi import APIRouter, Depends, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db.database import get_db
-from app.services.fighters.fighter_getter import (
-    FighterGetter,
-)
-from app.services.fighters.fighter_updater import (
-    FighterUpdater,
-)
 from app.schemas import ExtendedFighter as ExtendedFighterSchema
 from app.schemas.extended_fighter import ExtendedFighterFilter
+from app.services.fighters.fighter_getter import FighterGetter
+from app.services.fighters.fighter_updater import FighterUpdater
 from app.tools.utils import handle_empty_response
 
 extended_id_router = APIRouter(prefix="/id")

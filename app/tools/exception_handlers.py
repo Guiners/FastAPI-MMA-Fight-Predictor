@@ -1,12 +1,12 @@
-from fastapi import Request, FastAPI
+from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 
 from app.tools import logger
 from app.tools.exceptions.custom_api_exceptions import (
-    UnauthorizedException,
     ForbiddenException,
-    NotFoundException,
     InternalServerError,
+    NotFoundException,
+    UnauthorizedException,
 )
 
 

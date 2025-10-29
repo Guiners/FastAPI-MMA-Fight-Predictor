@@ -1,7 +1,7 @@
 from datetime import date
 from typing import Optional
 
-from pydantic import BaseModel, create_model
+from pydantic import BaseModel
 
 from app.tools.utils import create_filter_schema
 

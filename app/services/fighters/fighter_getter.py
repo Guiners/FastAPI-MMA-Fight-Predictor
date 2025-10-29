@@ -1,7 +1,5 @@
-from app.services.fighters.fighter_utils import (
-    FighterUtils,
-)
 from app.schemas.fighter import FighterFilter
+from app.services.fighters.fighter_utils import FighterUtils
 from app.tools.logger import logger
 
 

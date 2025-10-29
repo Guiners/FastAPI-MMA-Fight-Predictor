@@ -1,8 +1,7 @@
 from functools import wraps
 from typing import Optional
 
-from fastapi import HTTPException, Request
-from pydantic import ValidationError, create_model
+from pydantic import create_model
 
 from app.tools.exceptions.custom_api_exceptions import NotFoundException
 from app.tools.logger import logger
