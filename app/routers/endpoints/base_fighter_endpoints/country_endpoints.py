@@ -17,5 +17,5 @@ IS_EXTENDED = False
 @handle_empty_response
 async def get_fighters_data_by_country(
     country: str, db: AsyncSession = Depends(get_db)
-) -> typing.List[FighterSchema]|FighterSchema:
+) -> typing.List[FighterSchema] | FighterSchema:
     return await FighterGetter(db, IS_EXTENDED).get_fighters_by_country(country)

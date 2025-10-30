@@ -52,15 +52,15 @@ class TableFiller:
                     - Path to the JSON file with data.
         """
         try:
-            for table, path in data_dict.items():
+            for table, path in data_dict:
                 TableFiller._fill_table_from_json(db, table, path)
             await db.commit()
             logger.info("Database seeded successfully")
 
         except Exception as e:
-            logger.error(f"An error occurred during database seeding: {e}")
+            logger.error(f"An error occurred during database seeding")
             await db.rollback()
-            raise InternalServerError
+            raise InternalServerError from e
 
     @staticmethod
     def fix_data_column(data, column_name: str, _format: str = "%Y-%m-%d"):

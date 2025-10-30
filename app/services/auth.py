@@ -22,11 +22,15 @@ from app.tools.exceptions.custom_api_exceptions import (
     UnauthorizedException,
 )
 
-secret_key = "83489hfyy46457943095789cf4879f3890"
-algorith = "HS256"
+# secret_key = "83489hfyy46457943095789cf4879f3890"
+# algorith = "HS256"
+# #todo put in .env
+# SECRET_KEY = os.getenv("SECRET_KEY", secret_key)
+# ALGORITHM = os.getenv("ALGORITHM", algorith)
 
-SECRET_KEY = os.getenv("SECRET_KEY", secret_key)
-ALGORITHM = os.getenv("ALGORITHM", algorith)
+
+SECRET_KEY = os.getenv("SECRET_KEY")
+ALGORITHM = os.getenv("ALGORITHM")
 
 bcrypt_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 oauth2_bearer = OAuth2PasswordBearer(tokenUrl=f"{PREFIX}/auth/token")
@@ -49,8 +53,8 @@ class AuthService:
             return {"email": email, "id": user_id}
 
         except Exception as e:
-            logger.error(f"JTW ERROR: {e}")
-            raise UnauthorizedException
+            logger.error(f"JTW ERROR")
+            raise UnauthorizedException from e
 
     async def create_user(self, user_filter: UserFilter):
         try:
@@ -85,8 +89,8 @@ class AuthService:
                 raise UnauthorizedException
 
         except Exception as e:
-            logger.error(f"Logging error:{e}")
-            raise UnauthorizedException
+            logger.error(f"Logging error")
+            raise UnauthorizedException from e
 
         return user
 

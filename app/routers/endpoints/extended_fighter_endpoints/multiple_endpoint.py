@@ -15,7 +15,8 @@ IS_EXTENDED = True
 
 @extended_multiple_router.post("", status_code=status.HTTP_201_CREATED)
 async def create_multiple_extended_fighter(
-    fighters_data: typing.List[ExtendedFighterFilter], db: AsyncSession = Depends(get_db)
+    fighters_data: typing.List[ExtendedFighterFilter],
+    db: AsyncSession = Depends(get_db),
 ):
     return await FighterUpdater(db, IS_EXTENDED).add_multiple_fighters(fighters_data)
 

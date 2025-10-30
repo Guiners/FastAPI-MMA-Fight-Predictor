@@ -9,6 +9,7 @@ from app.schemas import ExtendedFighter as ExtendedFighterSchema
 from app.schemas.extended_fighter import ExtendedFighterFilter
 from app.schemas.fighter import Fighter as FighterSchema
 from app.schemas.fighter import FighterFilter
+from app.tools.exceptions.custom_api_exceptions import NotFoundException
 from app.tools.logger import logger
 
 BASE_STMT = select(Fighters)
@@ -38,7 +39,7 @@ class FighterUtils:
         self.fighter_schema = ExtendedFighterSchema if extended else FighterSchema
 
     @staticmethod
-    def build_where_stmt(filters: FighterFilter|ExtendedFighterFilter):
+    def build_where_stmt(filters: FighterFilter | ExtendedFighterFilter):
         filters_dict = filters.model_dump(exclude_none=True)
         logger.debug(f"fighter filter: {filters_dict}")
         where_stmt = []
@@ -57,13 +58,19 @@ class FighterUtils:
         data["fights_results"] = FightsResults(**data["fights_results"])
 
     async def _get_records_with_where_stmt(
-        self, where_stmt: list, validate: bool = True
+        self, where_stmt: list, validate: bool = True, lock_record: bool = False
     ):
-        records = await self.db.execute(self.stmt.where(*where_stmt))
+        if lock_record:
+            records = await self.db.execute(
+                self.stmt.where(*where_stmt).with_for_update()
+            )
+        else:
+            records = await self.db.execute(self.stmt.where(*where_stmt))
+
         fighters_list = records.scalars().all()
 
         if not fighters_list:
-            return None
+            raise NotFoundException
 
         convert = self.fighter_schema.model_validate if validate else (lambda x: x)
 
@@ -74,20 +81,33 @@ class FighterUtils:
 
     # todo typing
     async def _get_records_by_single_value(
-        self, column: str, value: str| int, validate: bool = True
+        self,
+        column: str,
+        value: str | int,
+        validate: bool = True,
+        lock_record: bool = False,
     ):
         column_attr = getattr(Fighters, column)
-        return await self._get_records_with_where_stmt([column_attr == value], validate)
+        return await self._get_records_with_where_stmt(
+            [column_attr == value], validate, lock_record
+        )
 
     async def get_fighter_by_name_nickname_surname(
-        self, name: str, nickname: str, surname: str, validate: bool = True
+        self,
+        name: str,
+        nickname: str,
+        surname: str,
+        validate: bool = True,
+        lock_record: bool = False,
     ):
         where_stmt = [
             Fighters.name == name,
             Fighters.nickname == nickname,
             Fighters.surname == surname,
         ]
-        return await self._get_records_with_where_stmt(where_stmt, validate)
+        return await self._get_records_with_where_stmt(
+            where_stmt, validate, lock_record
+        )
 
     async def get_fighters_by_param_with_limit(
         self, param_name: str, limit: int, order: str = "desc"

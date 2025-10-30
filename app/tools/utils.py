@@ -1,5 +1,5 @@
 from functools import wraps
-from typing import Optional
+from typing import Any, Optional, get_origin
 
 from pydantic import create_model
 
@@ -24,7 +24,7 @@ def handle_empty_response(func):
 
         except Exception as e:
             logger.error(e)
-            raise NotFoundException
+            raise NotFoundException from e
 
     return wrapper
 

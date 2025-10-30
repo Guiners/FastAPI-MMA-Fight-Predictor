@@ -1,5 +1,3 @@
-from typing import Optional
-
 from pydantic import BaseModel, ConfigDict, constr
 
 
@@ -9,7 +7,7 @@ class UserFilter(BaseModel):
 
 
 class User(BaseModel):
-    user_id: Optional[int] = None
+    user_id: int | None = None
     email: str
     hashed_password: str
 

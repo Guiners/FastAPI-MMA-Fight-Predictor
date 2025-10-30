@@ -18,5 +18,5 @@ IS_EXTENDED = True
 @handle_empty_response
 async def search_fighters(
     fighter_filters: FighterFilter = Depends(), db: AsyncSession = Depends(get_db)
-) -> typing.List[ExtendedFighterSchema]|ExtendedFighterSchema:
+) -> typing.List[ExtendedFighterSchema] | ExtendedFighterSchema:
     return await FighterGetter(db, IS_EXTENDED).search_extended_fighter(fighter_filters)
