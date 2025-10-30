@@ -11,8 +11,7 @@ class ExtendedFighter(Fighter):
     extended_stats: ExtendedStats | None = None
     fights_results: FightsResults | None = None
 
-    class Config:
-        from_attributes = True
+    model_config = {"from_attributes": True}
 
 
 class ExtendedFighterFilter(FighterFilter):
@@ -20,5 +19,4 @@ class ExtendedFighterFilter(FighterFilter):
     extended_stats: ExtendedStatsFilter | None = None
     fights_results: FightsResultsFilter | None = None
 
-    class Config:
-        from_attributes = True
+    model_config = {"from_attributes": True}

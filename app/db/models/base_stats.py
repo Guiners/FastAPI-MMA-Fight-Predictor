@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+import typing
 
 from sqlalchemy import Date, Float, ForeignKey, Integer
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -8,8 +8,7 @@ from sqlalchemy.sql import func
 
 from app.db.models.base import Base
 
-if TYPE_CHECKING:
-    from .extended_stats import ExtendedStats
+if typing.TYPE_CHECKING:
     from .fighters import Fighters
 
 
@@ -43,6 +42,3 @@ class BaseStats(Base):
     fighter: Mapped["Fighters"] = relationship(
         back_populates="base_stats", uselist=False
     )
-    # extended_stats: Mapped["ExtendedStats"] = relationship(
-    #     back_populates="base_stats", uselist=False
-    # )

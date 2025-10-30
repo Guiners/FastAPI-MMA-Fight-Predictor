@@ -5,8 +5,10 @@ from pathlib import Path
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.db.constants import example_data_paths
+from app.constants import example_data_paths
 from app.db.database import get_db
+from app.services.fighters import DatabaseManagerBase
+from app.tools.exceptions.custom_api_exceptions import InternalServerError
 from app.tools.logger import logger
 
 LAST_FIGHT_DATE = "last_fight_date"
@@ -50,15 +52,15 @@ class TableFiller:
                     - Path to the JSON file with data.
         """
         try:
-            for table, path in data_dict.items():
+            for table, path in data_dict:
                 TableFiller._fill_table_from_json(db, table, path)
             await db.commit()
             logger.info("Database seeded successfully")
 
         except Exception as e:
-            logger.error(f"An error occurred during database seeding: {e}")
+            logger.error(f"An error occurred during database seeding")
             await db.rollback()
-            raise
+            raise InternalServerError from e
 
     @staticmethod
     def fix_data_column(data, column_name: str, _format: str = "%Y-%m-%d"):
@@ -68,7 +70,7 @@ class TableFiller:
 
 async def main():
     async for mma_db in get_db():
-        # await TableFiller.clear_tables(mma_db)
+        await DatabaseManagerBase(mma_db, False).clear_all_tables()
         await TableFiller.fill_database_with_data(mma_db, example_data_paths)
 
 

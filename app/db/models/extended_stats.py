@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+import typing
 
 from sqlalchemy import Date, Float, ForeignKey, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -8,7 +8,7 @@ from sqlalchemy.sql import func
 
 from app.db.models.base import Base
 
-if TYPE_CHECKING:
+if typing.TYPE_CHECKING:
     from .base_stats import BaseStats
     from .fighters import Fighters
 

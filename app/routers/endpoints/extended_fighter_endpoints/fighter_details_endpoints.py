@@ -1,14 +1,12 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db.database import get_db
-from app.db.database_menagers.database_manager_getter import \
-    DatabaseManagerGetter
-from app.db.database_menagers.database_manager_updater import \
-    DatabaseManagerUpdater
 from app.schemas import ExtendedFighter as ExtendedFighterSchema
 from app.schemas.extended_fighter import ExtendedFighterFilter
-from app.tools.tools import handle_empty_response
+from app.services.fighters.fighter_getter import FighterGetter
+from app.services.fighters.fighter_updater import FighterUpdater
+from app.tools.utils import handle_empty_response
 
 extended_fighter_details_router = APIRouter(prefix="/fighter_details")
 
@@ -16,19 +14,20 @@ IS_EXTENDED = True
 
 
 @extended_fighter_details_router.get(
-    "/name/{name}/nickname/{nickname}/surname/{surname}"
+    "/name/{name}/nickname/{nickname}/surname/{surname}", status_code=status.HTTP_200_OK
 )
 @handle_empty_response
 async def get_extended_fighter_by_name_nickname_surname(
     name: str, nickname: str, surname: str, db: AsyncSession = Depends(get_db)
 ) -> ExtendedFighterSchema:
-    return await DatabaseManagerGetter(
-        db, IS_EXTENDED
-    ).get_fighter_by_name_nickname_surname(name, nickname, surname)
+    return await FighterGetter(db, IS_EXTENDED).get_fighter_by_name_nickname_surname(
+        name, nickname, surname
+    )
 
 
 @extended_fighter_details_router.put(
-    "/name/{name}/nickname/{nickname}/surname/{surname}"
+    "/name/{name}/nickname/{nickname}/surname/{surname}",
+    status_code=status.HTTP_202_ACCEPTED,
 )
 @handle_empty_response
 async def update_extended_fighter_by_name(
@@ -38,6 +37,6 @@ async def update_extended_fighter_by_name(
     fighter_data: ExtendedFighterFilter,
     db: AsyncSession = Depends(get_db),
 ):
-    return await DatabaseManagerUpdater(
+    return await FighterUpdater(
         db, IS_EXTENDED
     ).update_fighter_by_name_nickname_surname(name, nickname, surname, fighter_data)
