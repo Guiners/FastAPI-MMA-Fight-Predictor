@@ -22,6 +22,10 @@ from app.routers.endpoints.extended_fighter_endpoints.search_endpoints import (
 from app.routers.endpoints.extended_fighter_endpoints.top_fighter_endpoints import (
     extended_top_router,
 )
+from app.routers.endpoints.extended_fighter_endpoints.weightclass_endpoints import (
+    extended_weightclass_router,
+)
+
 from app.schemas import ExtendedFighter as ExtendedFighterSchema
 from app.schemas.extended_fighter import ExtendedFighterFilter
 from app.services.fighters.fighter_getter import FighterGetter
@@ -36,6 +40,7 @@ extended_fighter_router.include_router(extended_fighter_details_router)
 extended_fighter_router.include_router(extended_multiple_router)
 extended_fighter_router.include_router(extended_search_router)
 extended_fighter_router.include_router(extended_top_router)
+extended_fighter_router.include_router(extended_weightclass_router)
 
 IS_EXTENDED = True
 
