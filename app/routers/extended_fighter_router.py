@@ -25,7 +25,6 @@ from app.routers.endpoints.extended_fighter_endpoints.top_fighter_endpoints impo
 from app.routers.endpoints.extended_fighter_endpoints.weightclass_endpoints import (
     extended_weightclass_router,
 )
-
 from app.schemas import ExtendedFighter as ExtendedFighterSchema
 from app.schemas.extended_fighter import ExtendedFighterFilter
 from app.services.fighters.fighter_getter import FighterGetter
