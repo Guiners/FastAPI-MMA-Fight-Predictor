@@ -33,19 +33,6 @@ class DataBaseManager:
         )
         logger.info(f"Column {column_name} added to {table_name}")
 
-    #     await self.column_exists(table_name, column_name)
-    #
-    # async def column_exists(self, table_name: str, column_name: str):
-    #     query = f"""
-    #         SELECT 1
-    #         FROM information_schema.columns
-    #         WHERE table_name = '{table_name}'
-    #         AND column_name = '{column_name}'
-    #     """
-    #     result = await self._execute_ddl(query)
-    #     logger.critical(result)
-    #     return result.scalar()
-
     async def remove_column(self, table_name: str, column_name: str):
         await self._execute_ddl(
             f"ALTER TABLE {table_name} DROP COLUMN IF EXISTS {column_name}"
