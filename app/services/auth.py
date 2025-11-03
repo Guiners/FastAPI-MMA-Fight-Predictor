@@ -1,19 +1,15 @@
 import os
 from datetime import datetime, timedelta
 
-from fastapi import Depends, HTTPException
+from fastapi import Depends
 from fastapi.security import OAuth2PasswordBearer
-from jose import JWTError, jwt
+from jose import jwt
 from passlib.context import CryptContext
 from sqlalchemy import select, text
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.testing.suite.test_reflection import users
-from starlette import status
-from starlette.status import HTTP_401_UNAUTHORIZED
 
 from app.constants import PREFIX
 from app.db.models.users import Users
-from app.schemas.token import Token as TokenSchema
 from app.schemas.users import User as UserSchema
 from app.schemas.users import UserFilter
 from app.tools import logger

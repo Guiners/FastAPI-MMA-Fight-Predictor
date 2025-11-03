@@ -1,10 +1,7 @@
 from fastapi import Depends, FastAPI
 from fastapi.staticfiles import StaticFiles
-from sqlalchemy.ext.asyncio import AsyncSession
-from starlette import status
 
 from app.constants import PREFIX, version
-from app.db.database import get_db
 from app.middleware.middlewares import log_requests
 from app.routers.auth_router import auth_router
 from app.routers.base_fighter_router import base_fighter_router
@@ -25,14 +22,9 @@ app.mount("/static", StaticFiles(directory="app/static"), name="static")
 
 register_exception_handlers(app)
 
-# @app.get("/")
-# async def root():
-#     return {"message": "Welcome to MMA Fight Predictor"}
-
 
 @app.get("/", response_model=None)
 async def user(
-    # db: AsyncSession = Depends(get_db),
     user: dict = Depends(AuthService.get_current_user),
 ):
     if user is None:

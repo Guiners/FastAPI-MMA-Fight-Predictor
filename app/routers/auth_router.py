@@ -17,7 +17,6 @@ async def create_user(
 
 
 @auth_router.get("", status_code=status.HTTP_200_OK)
-# @handle_empty_response
 async def get_all_users(
     db: AsyncSession = Depends(get_db),
 ):

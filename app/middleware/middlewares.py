@@ -1,6 +1,6 @@
 import time
 
-from fastapi import HTTPException, Request
+from fastapi import Request
 
 from app.tools.logger import logger
 

@@ -13,11 +13,6 @@ from app.tools.exceptions.custom_api_exceptions import NotFoundException
 from app.tools.logger import logger
 
 BASE_STMT = select(Fighters)
-# EXTENDED_STMT = select(Fighters).options(
-#     joinedload(Fighters.base_stats),
-#     joinedload(Fighters.extended_stats),
-#     joinedload(Fighters.fights_results),
-# )
 EXTENDED_STMT = (
     select(Fighters)
     .join(BaseStats, Fighters.fighter_id == BaseStats.fighter_id, isouter=True)

@@ -1,5 +1,5 @@
 from functools import wraps
-from typing import Any, Optional, get_origin
+from typing import Optional
 
 from pydantic import create_model
 
