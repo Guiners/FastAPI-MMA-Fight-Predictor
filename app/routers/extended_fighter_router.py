@@ -1,6 +1,6 @@
 import typing
 
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends, Request, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db.database import get_db
@@ -29,6 +29,7 @@ from app.schemas import ExtendedFighter as ExtendedFighterSchema
 from app.schemas.extended_fighter import ExtendedFighterFilter
 from app.services.fighters.fighter_getter import FighterGetter
 from app.services.fighters.fighter_updater import FighterUpdater
+from app.templates import templates
 from app.tools.utils import handle_empty_response
 
 extended_fighter_router = APIRouter(prefix="/extended_fighter")
@@ -45,11 +46,14 @@ IS_EXTENDED = True
 
 
 @extended_fighter_router.get("", status_code=status.HTTP_200_OK)
-@handle_empty_response
 async def get_all_extended_fighters_list(
+    request: Request,
     db: AsyncSession = Depends(get_db),
-) -> typing.List[ExtendedFighterSchema]:
-    return await FighterGetter(db, IS_EXTENDED).get_all_fighters_records()
+):
+    fighters = await FighterGetter(db, IS_EXTENDED).get_all_fighters_records()
+    return templates.TemplateResponse(
+        "fighter_list.html", {"request": request, "fighters": fighters}
+    )
 
 
 @extended_fighter_router.post("", status_code=status.HTTP_201_CREATED)

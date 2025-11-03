@@ -1,7 +1,7 @@
 from fastapi import Depends, FastAPI
+from fastapi.staticfiles import StaticFiles
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
-from fastapi.staticfiles import StaticFiles
 
 from app.constants import PREFIX, version
 from app.db.database import get_db
