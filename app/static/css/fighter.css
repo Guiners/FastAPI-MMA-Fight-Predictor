@@ -1,0 +1,88 @@
+body {
+    background: #121212;
+    color: #f1f1f1;
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.fighter-profile {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 30px;
+    background: #1e1e1e;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+}
+
+.fighter-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.fighter-header h1 {
+    font-size: 2rem;
+    color: #e53935;
+    margin-bottom: 5px;
+}
+
+.country, .weight-class {
+    color: #bbb;
+    font-size: 0.9rem;
+}
+
+.fighter-summary {
+    background: #252525;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+.record {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.fighter-section {
+    margin-top: 25px;
+}
+
+.fighter-section h2 {
+    color: #ff7043;
+    border-bottom: 1px solid #444;
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #2a2a2a;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+th, td {
+    padding: 10px 12px;
+    text-align: left;
+}
+
+th {
+    width: 60%;
+    color: #ddd;
+    background: #333;
+}
+
+td {
+    background: #2a2a2a;
+    color: #fff;
+}
+
+footer {
+    text-align: center;
+    color: #999;
+    font-size: 0.8rem;
+    margin-top: 25px;
+}

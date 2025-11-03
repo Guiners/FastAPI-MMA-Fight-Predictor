@@ -33,7 +33,7 @@ async def get_base_fighter_by_id(
     request: Request, fighter_id: int, db: AsyncSession = Depends(get_db)
 ):
     fighter = await FighterGetter(db, IS_EXTENDED).get_fighter_by_id(fighter_id)
-    return templates.TemplateResponse("single_base_fighter.html", {"request": request, "fighter": fighter})
+    return templates.TemplateResponse("fighter.html", {"request": request, "fighter": fighter})
 
 @base_id_router.delete("/{fighter_id}", status_code=status.HTTP_200_OK)
 @handle_empty_response

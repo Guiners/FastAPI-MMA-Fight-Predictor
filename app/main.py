@@ -1,6 +1,7 @@
 from fastapi import Depends, FastAPI
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
+from fastapi.staticfiles import StaticFiles
 
 from app.constants import PREFIX, version
 from app.db.database import get_db
@@ -20,6 +21,7 @@ app.include_router(base_fighter_router, prefix=PREFIX)
 app.include_router(extended_fighter_router, prefix=PREFIX)
 app.include_router(auth_router, prefix=PREFIX)
 app.include_router(database_manager_router, prefix=PREFIX)
+app.mount("/static", StaticFiles(directory="app/static"), name="static")
 
 register_exception_handlers(app)
 
