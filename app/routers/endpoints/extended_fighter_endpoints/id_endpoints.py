@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, Request, status
+from fastapi.responses import HTMLResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db.database import get_db
-from app.schemas import ExtendedFighter as ExtendedFighterSchema
 from app.schemas.extended_fighter import ExtendedFighterFilter
 from app.services.fighters.fighter_getter import FighterGetter
 from app.services.fighters.fighter_updater import FighterUpdater
@@ -14,7 +14,9 @@ extended_id_router = APIRouter(prefix="/id")
 IS_EXTENDED = True
 
 
-@extended_id_router.get("/{fighter_id}", status_code=status.HTTP_200_OK)
+@extended_id_router.get(
+    "/{fighter_id}", status_code=status.HTTP_200_OK, response_class=HTMLResponse
+)
 async def get_extended_fighter_by_id(
     request: Request, fighter_id: int, db: AsyncSession = Depends(get_db)
 ):

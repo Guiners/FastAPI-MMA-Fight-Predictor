@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, Request, status
+from fastapi.responses import HTMLResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db.database import get_db
-from app.schemas.fighter import Fighter as FighterSchema
 from app.schemas.fighter import FighterFilter
 from app.services.fighters.fighter_getter import FighterGetter
 from app.services.fighters.fighter_updater import FighterUpdater
@@ -15,7 +15,9 @@ IS_EXTENDED = False
 
 
 @base_fighter_details_router.get(
-    "/name/{name}/nickname/{nickname}/surname/{surname}", status_code=status.HTTP_200_OK
+    "/name/{name}/nickname/{nickname}/surname/{surname}",
+    status_code=status.HTTP_200_OK,
+    response_class=HTMLResponse,
 )
 async def get_base_fighter_by_name_nickname_surname(
     request: Request,

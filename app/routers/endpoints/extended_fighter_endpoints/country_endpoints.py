@@ -1,21 +1,20 @@
-import typing
-
 from fastapi import APIRouter, Depends, Request, status
+from fastapi.responses import HTMLResponse
 from sqlalchemy import func
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db.database import get_db
-from app.schemas import ExtendedFighter as ExtendedFighterSchema
 from app.services.fighters.fighter_getter import FighterGetter
 from app.templates import templates
-from app.tools.utils import handle_empty_response
 
 extended_country_router = APIRouter(prefix="/country")
 
 IS_EXTENDED = True
 
 
-@extended_country_router.get("/{country}", status_code=status.HTTP_200_OK)
+@extended_country_router.get(
+    "/{country}", status_code=status.HTTP_200_OK, response_class=HTMLResponse
+)
 async def get_extended_fighters_by_country(
     request: Request, country: str, db: AsyncSession = Depends(get_db)
 ):
