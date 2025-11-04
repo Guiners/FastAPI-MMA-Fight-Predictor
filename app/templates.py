@@ -6,6 +6,12 @@ from fastapi.templating import Jinja2Templates
 def short_date(value):
     return value.strftime("%d.%m.%Y")
 
+def clean_str(value):
+    if type(value) is str:
+        return value.replace("_", " ")
+    return value
+
+
 
 templates = Jinja2Templates(directory="app/templates")
 
@@ -17,4 +23,4 @@ templates.env.globals.update(
 )
 
 templates.env.filters["short_date"] = short_date
-# TODO DODAC STATIC, DODAC OBSLUGE EXTENDED FIGHTER, LISTY DLA BASE I EXTENDED, DO OGARNIECIA STATYSTYK Z TEGO GROUP BY HAVING
+templates.env.filters["clean_str"] = clean_str

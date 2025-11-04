@@ -7,7 +7,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.constants import example_data_paths
 from app.db.database import get_db
-from app.services.fighters import DatabaseManagerBase  # todo ogarnac ten import
+from app.services.fighters.fighter_utils import FighterUtils
+
 from app.tools.exceptions.custom_api_exceptions import InternalServerError
 from app.tools.logger import logger
 
@@ -70,7 +71,7 @@ class TableFiller:
 
 async def main():
     async for mma_db in get_db():
-        await DatabaseManagerBase(mma_db, False).clear_all_tables()
+        await FighterUtils(mma_db, False).clear_all_tables()
         await TableFiller.fill_database_with_data(mma_db, example_data_paths)
 
 

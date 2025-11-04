@@ -18,12 +18,6 @@ from app.tools.exceptions.custom_api_exceptions import (
     UnauthorizedException,
 )
 
-# secret_key = "83489hfyy46457943095789cf4879f3890"
-# algorith = "HS256"
-# #todo put in .env
-# SECRET_KEY = os.getenv("SECRET_KEY", secret_key)
-# ALGORITHM = os.getenv("ALGORITHM", algorith)
-
 
 SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = os.getenv("ALGORITHM")
