@@ -15,8 +15,20 @@ IS_EXTENDED = False
     "/{country}", status_code=status.HTTP_200_OK, response_class=HTMLResponse
 )
 async def get_fighters_data_by_country(
-    request: Request, country: str, db: AsyncSession = Depends(get_db)
-):
+    request: Request,
+    country: str,
+    db: AsyncSession = Depends(get_db),
+) -> HTMLResponse:
+    """Retrieve and render a list of fighters from a specific country.
+
+    Args:
+        request (Request): Incoming FastAPI request object.
+        country (str): Country name used to filter fighters.
+        db (AsyncSession): Active database session (injected via dependency).
+
+    Returns:
+        HTMLResponse: Rendered HTML template displaying a list of fighters.
+    """
     fighters = await FighterGetter(db, IS_EXTENDED).get_fighters_by_country(country)
     return templates.TemplateResponse(
         "fighter_list.html", {"request": request, "fighters": fighters}

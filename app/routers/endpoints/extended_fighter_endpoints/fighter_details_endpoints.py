@@ -25,7 +25,19 @@ async def get_extended_fighter_by_name_nickname_surname(
     nickname: str,
     surname: str,
     db: AsyncSession = Depends(get_db),
-):
+) -> HTMLResponse:
+    """Retrieve extended fighter details by name, nickname, and surname.
+
+    Args:
+        request (Request): FastAPI request object.
+        name (str): Fighter’s first name.
+        nickname (str): Fighter’s nickname.
+        surname (str): Fighter’s surname.
+        db (AsyncSession): Active SQLAlchemy session (dependency-injected).
+
+    Returns:
+        HTMLResponse: Rendered HTML template with the fighter’s data.
+    """
     fighters = await FighterGetter(
         db, IS_EXTENDED
     ).get_fighter_by_name_nickname_surname(name, nickname, surname)
@@ -46,6 +58,18 @@ async def update_extended_fighter_by_name(
     fighter_data: ExtendedFighterFilter,
     db: AsyncSession = Depends(get_db),
 ):
+    """Update extended fighter data using name, nickname, and surname.
+
+    Args:
+        name (str): Fighter’s first name.
+        nickname (str): Fighter’s nickname.
+        surname (str): Fighter’s surname.
+        fighter_data (ExtendedFighterFilter): New fighter data to update.
+        db (AsyncSession): Active SQLAlchemy session (dependency-injected).
+
+    Returns:
+        dict: Confirmation of update operation or the updated fighter data.
+    """
     return await FighterUpdater(
         db, IS_EXTENDED
     ).update_fighter_by_name_nickname_surname(name, nickname, surname, fighter_data)

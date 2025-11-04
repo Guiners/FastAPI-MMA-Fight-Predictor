@@ -17,6 +17,16 @@ IS_EXTENDED = True
 async def get_top_extended_fighters_by_wins(
     request: Request, limit: int, db: AsyncSession = Depends(get_db)
 ):
+    """Retrieve top extended fighters ranked by total wins.
+
+    Args:
+        request (Request): FastAPI request object.
+        limit (int): Maximum number of fighters to return.
+        db (AsyncSession): Active SQLAlchemy asynchronous session.
+
+    Returns:
+        TemplateResponse: Rendered HTML displaying top fighters by wins.
+    """
     fighters = await FighterGetter(db, IS_EXTENDED).get_fighters_by_param_with_limit(
         "wins", limit
     )
@@ -31,6 +41,16 @@ async def get_top_extended_fighters_by_wins(
 async def get_top_fighters_by_loss(
     request: Request, limit: int, db: AsyncSession = Depends(get_db)
 ):
+    """Retrieve top extended fighters ranked by total losses.
+
+    Args:
+        request (Request): FastAPI request object.
+        limit (int): Maximum number of fighters to return.
+        db (AsyncSession): Active SQLAlchemy asynchronous session.
+
+    Returns:
+        TemplateResponse: Rendered HTML displaying top fighters by losses.
+    """
     fighters = await FighterGetter(db, IS_EXTENDED).get_fighters_by_param_with_limit(
         "loss", limit
     )
@@ -45,6 +65,16 @@ async def get_top_fighters_by_loss(
 async def get_top_fighters_by_ko_wins(
     request: Request, limit: int, db: AsyncSession = Depends(get_db)
 ):
+    """Retrieve top extended fighters ranked by knockout or TKO wins.
+
+    Args:
+        request (Request): FastAPI request object.
+        limit (int): Maximum number of fighters to return.
+        db (AsyncSession): Active SQLAlchemy asynchronous session.
+
+    Returns:
+        TemplateResponse: Rendered HTML displaying top fighters by KO/TKO wins.
+    """
     fighters = await FighterGetter(db, IS_EXTENDED).get_fighters_by_param_with_limit(
         "win_by_ko_tko", limit
     )
@@ -59,6 +89,16 @@ async def get_top_fighters_by_ko_wins(
 async def get_top_fighters_by_ko_loss(
     request: Request, limit: int, db: AsyncSession = Depends(get_db)
 ):
+    """Retrieve top extended fighters ranked by knockout or TKO losses.
+
+    Args:
+        request (Request): FastAPI request object.
+        limit (int): Maximum number of fighters to return.
+        db (AsyncSession): Active SQLAlchemy asynchronous session.
+
+    Returns:
+        TemplateResponse: Rendered HTML displaying top fighters by KO/TKO losses.
+    """
     fighters = await FighterGetter(db, IS_EXTENDED).get_fighters_by_param_with_limit(
         "loss_by_ko_tko", limit
     )

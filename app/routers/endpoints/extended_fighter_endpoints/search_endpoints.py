@@ -20,6 +20,16 @@ async def search_fighters(
     fighter_filters: FighterFilter = Depends(),
     db: AsyncSession = Depends(get_db),
 ):
+    """Search for extended fighters using various filter criteria.
+
+    Args:
+        request (Request): FastAPI request object.
+        fighter_filters (FighterFilter): Query parameters used to filter fighters.
+        db (AsyncSession): Active SQLAlchemy asynchronous session.
+
+    Returns:
+        TemplateResponse: Rendered HTML page displaying the list of matching fighters.
+    """
     fighters = await FighterGetter(db, IS_EXTENDED).search_extended_fighter(
         fighter_filters
     )

@@ -1,3 +1,5 @@
+import typing
+
 from sqlalchemy import asc, desc, func, select, text
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import aliased, joinedload
@@ -27,14 +29,40 @@ EXTENDED_STMT = (
 
 
 class FighterUtils:
-    def __init__(self, db: AsyncSession, extended: bool = False):
+    """
+    Utility class for handling fighter-related database operations.
+
+    Attributes:
+        db (AsyncSession): SQLAlchemy asynchronous database session.
+        is_extended (bool): Flag to determine whether to use extended schema.
+        stmt: SQLAlchemy select statement for base or extended models.
+        fighter_schema: Schema class used for data validation (base or extended).
+    """
+
+    def __init__(self, db: AsyncSession, extended: bool = False) -> None:
+        """
+        Initialize FighterUtils with database session and mode.
+
+        Args:
+            db (AsyncSession): SQLAlchemy async session.
+            extended (bool): If True, use the extended fighter schema and query.
+        """
         self.db = db
         self.is_extended = extended
         self.stmt = EXTENDED_STMT if extended else BASE_STMT
         self.fighter_schema = ExtendedFighterSchema if extended else FighterSchema
 
     @staticmethod
-    def build_where_stmt(filters: FighterFilter | ExtendedFighterFilter):
+    def build_where_stmt(filters: FighterFilter | ExtendedFighterFilter) -> typing.List:
+        """
+        Build SQLAlchemy where clauses from a filter schema.
+
+        Args:
+            filters (FighterFilter | ExtendedFighterFilter): Filter parameters.
+
+        Returns:
+            list: SQLAlchemy filter expressions.
+        """
         filters_dict = filters.model_dump(exclude_none=True)
         logger.debug(f"fighter filter: {filters_dict}")
         where_stmt = []
@@ -47,14 +75,31 @@ class FighterUtils:
         return where_stmt
 
     @staticmethod
-    def convert_stats_dicts_to_models(data):
+    def convert_stats_dicts_to_models(data: dict) -> None:
+        """
+        Convert nested dictionaries in fighter data into SQLAlchemy model instances.
+
+        Args:
+            data (dict): Fighter data dictionary with nested stats.
+        """
         data["base_stats"] = BaseStats(**data["base_stats"])
         data["extended_stats"] = ExtendedStats(**data["extended_stats"])
         data["fights_results"] = FightsResults(**data["fights_results"])
 
     async def _get_records_with_where_stmt(
         self, where_stmt: list, validate: bool = True, lock_record: bool = False
-    ):
+    ) -> typing.Any:
+        """
+        Retrieve records that match a given WHERE clause.
+
+        Args:
+            where_stmt (list): SQLAlchemy filter expressions.
+            validate (bool): Whether to validate the results using schema.
+            lock_record (bool): Whether to lock the records for update.
+
+        Returns:
+            Any: Single fighter record or list of records.
+        """
         if lock_record:
             records = await self.db.execute(
                 self.stmt.where(*where_stmt).with_for_update()
@@ -74,14 +119,25 @@ class FighterUtils:
 
         return convert(fighters_list[0])
 
-    # todo typing
     async def _get_records_by_single_value(
         self,
         column: str,
         value: str | int,
         validate: bool = True,
         lock_record: bool = False,
-    ):
+    ) -> typing.Any:
+        """
+        Retrieve records filtered by a single column value.
+
+        Args:
+            column (str): Name of the column.
+            value (str | int): Value to match.
+            validate (bool): Whether to validate the results.
+            lock_record (bool): Whether to lock the record.
+
+        Returns:
+            Any: Matching fighter record(s).
+        """
         column_attr = getattr(Fighters, column)
         return await self._get_records_with_where_stmt(
             [column_attr == value], validate, lock_record
@@ -94,7 +150,20 @@ class FighterUtils:
         surname: str,
         validate: bool = True,
         lock_record: bool = False,
-    ):
+    ) -> typing.Any:
+        """
+        Retrieve a fighter by their name, nickname, and surname.
+
+        Args:
+            name (str): Fighter's first name.
+            nickname (str): Fighter's nickname.
+            surname (str): Fighter's surname.
+            validate (bool): Whether to validate results.
+            lock_record (bool): Whether to lock the record.
+
+        Returns:
+            Any: Matching fighter record.
+        """
         where_stmt = [
             Fighters.name == name,
             Fighters.nickname == nickname,
@@ -107,8 +176,16 @@ class FighterUtils:
     async def get_fighters_by_param_with_limit(
         self, param_name: str, limit: int, order: str = "desc"
     ):
-        column, _ = self._get_column_if_param_in_tables(param_name)
+        """
+        Retrieve fighters ordered by a specific parameter.
 
+        Args:
+            param_name (str): Column to sort by.
+            limit (int): Maximum number of records to return.
+            order (str): Sort order ('asc' or 'desc').
+
+        """
+        column, _ = self._get_column_if_param_in_tables(param_name)
         order_func = desc if order.lower() == "desc" else asc
         result = await self.db.execute(
             self.stmt.order_by(order_func(column)).limit(limit)
@@ -116,7 +193,16 @@ class FighterUtils:
         return result.scalars().all()
 
     @staticmethod
-    def _get_column_if_param_in_tables(param_name: str):
+    def _get_column_if_param_in_tables(param_name: str) -> tuple:
+        """
+        Find the corresponding column and model for a given parameter name.
+
+        Args:
+            param_name (str): Name of the column.
+
+        Returns:
+            tuple: (SQLAlchemy column, model)
+        """
         for model in MODELS_LIST:
             if hasattr(model, param_name):
                 return getattr(model, param_name), model
@@ -128,9 +214,21 @@ class FighterUtils:
         param_name2: str,
         math_func1,
         math_func2=func.count,
-        label1="stat",
-        label2="count",
+        label1: str = "stat",
+        label2: str = "count",
     ):
+        """
+        Retrieve grouped statistical data for fighters.
+
+        Args:
+            param_name1 (str): First parameter name (group by column).
+            param_name2 (str): Second parameter name (aggregate column).
+            math_func1: SQL function applied to the second parameter.
+            math_func2: SQL aggregation function (default: func.count).
+            label1 (str): Label for the aggregated value.
+            label2 (str): Label for the count.
+
+        """
         column1, model1 = self._get_column_if_param_in_tables(param_name1)
         column2, model2 = self._get_column_if_param_in_tables(param_name2)
 
@@ -153,6 +251,12 @@ class FighterUtils:
         return result.mappings().all()
 
     async def clear_all_tables(self) -> None:
+        """
+        Truncate all tables in the database and reset identity sequences.
+
+        Returns:
+            None
+        """
         meta = Base.metadata
         for table in reversed(meta.sorted_tables):
             logger.info(f"Truncating: {table}")

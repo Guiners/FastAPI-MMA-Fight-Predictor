@@ -1,3 +1,5 @@
+import typing
+
 from fastapi import APIRouter, Depends, Request, status
 from fastapi.responses import HTMLResponse
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -25,7 +27,19 @@ async def get_base_fighter_by_name_nickname_surname(
     nickname: str,
     surname: str,
     db: AsyncSession = Depends(get_db),
-):
+) -> HTMLResponse:
+    """Retrieve and render fighter data by full name and nickname.
+
+    Args:
+        request (Request): FastAPI request object.
+        name (str): Fighter's first name.
+        nickname (str): Fighter's nickname.
+        surname (str): Fighter's last name.
+        db (AsyncSession): Active database session (dependency-injected).
+
+    Returns:
+        HTMLResponse: Rendered HTML template with fighter details.
+    """
     fighters = await FighterGetter(
         db, IS_EXTENDED
     ).get_fighter_by_name_nickname_surname(name, nickname, surname)
@@ -45,7 +59,19 @@ async def update_base_fighter_by_name(
     surname: str,
     fighter_data: FighterFilter = Depends(),
     db: AsyncSession = Depends(get_db),
-):
+) -> typing.Dict[str, typing.Any]:
+    """Update fighter data by name, nickname, and surname.
+
+    Args:
+        name (str): Fighter's first name.
+        nickname (str): Fighter's nickname.
+        surname (str): Fighter's last name.
+        fighter_data (FighterFilter): Filter or data payload for updating fighter details.
+        db (AsyncSession): Active database session (dependency-injected).
+
+    Returns:
+        dict: Updated fighter record or confirmation of successful update.
+    """
     return await FighterUpdater(
         db, IS_EXTENDED
     ).update_fighter_by_name_nickname_surname(name, nickname, surname, fighter_data)

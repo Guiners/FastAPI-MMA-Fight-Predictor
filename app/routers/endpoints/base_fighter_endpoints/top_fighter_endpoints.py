@@ -12,11 +12,25 @@ IS_EXTENDED = False
 
 
 @base_top_router.get(
-    "/wins", status_code=status.HTTP_200_OK, response_class=HTMLResponse
+    "/wins",
+    status_code=status.HTTP_200_OK,
+    response_class=HTMLResponse,
 )
 async def get_top_fighters_by_wins(
-    request: Request, limit: int, db: AsyncSession = Depends(get_db)
-):
+    request: Request,
+    limit: int,
+    db: AsyncSession = Depends(get_db),
+) -> HTMLResponse:
+    """Retrieve the top fighters ranked by number of wins.
+
+    Args:
+        request (Request): The FastAPI request object.
+        limit (int): The maximum number of fighters to retrieve.
+        db (AsyncSession): Active database session (dependency-injected).
+
+    Returns:
+        HTMLResponse: Rendered HTML page displaying top fighters by wins.
+    """
     fighters = await FighterGetter(db, IS_EXTENDED).get_fighters_by_param_with_limit(
         "wins", limit
     )
@@ -26,11 +40,25 @@ async def get_top_fighters_by_wins(
 
 
 @base_top_router.get(
-    "/loss", status_code=status.HTTP_200_OK, response_class=HTMLResponse
+    "/loss",
+    status_code=status.HTTP_200_OK,
+    response_class=HTMLResponse,
 )
 async def get_top_fighters_by_loss(
-    request: Request, limit: int, db: AsyncSession = Depends(get_db)
-):
+    request: Request,
+    limit: int,
+    db: AsyncSession = Depends(get_db),
+) -> HTMLResponse:
+    """Retrieve the top fighters ranked by number of losses.
+
+    Args:
+        request (Request): The FastAPI request object.
+        limit (int): The maximum number of fighters to retrieve.
+        db (AsyncSession): Active database session (dependency-injected).
+
+    Returns:
+        HTMLResponse: Rendered HTML page displaying top fighters by losses.
+    """
     fighters = await FighterGetter(db, IS_EXTENDED).get_fighters_by_param_with_limit(
         "loss", limit
     )

@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, status, Request
+from fastapi import APIRouter, Depends, Request, status
 from sqlalchemy import func
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -12,8 +12,19 @@ IS_EXTENDED = True
 
 
 @extended_weightclass_router.get("/age", status_code=status.HTTP_200_OK)
-async def get_avg_age_per_weight_class(request: Request, db: AsyncSession = Depends(get_db)):
-    results =  await FighterGetter(db, IS_EXTENDED).get_grouped_stat(
+async def get_avg_age_per_weight_class(
+    request: Request, db: AsyncSession = Depends(get_db)
+):
+    """Retrieve the average fighter age per weight class.
+
+    Args:
+        request (Request): FastAPI request object.
+        db (AsyncSession): Active SQLAlchemy asynchronous session.
+
+    Returns:
+        TemplateResponse: Rendered HTML with the average age grouped by weight class.
+    """
+    results = await FighterGetter(db, IS_EXTENDED).get_grouped_stat(
         param_name1="weight_class",
         param_name2="age",
         math_func1=func.avg,
@@ -26,7 +37,18 @@ async def get_avg_age_per_weight_class(request: Request, db: AsyncSession = Depe
 
 
 @extended_weightclass_router.get("/wins", status_code=status.HTTP_200_OK)
-async def get_avg_wins_per_weight_class(request: Request, db: AsyncSession = Depends(get_db)):
+async def get_avg_wins_per_weight_class(
+    request: Request, db: AsyncSession = Depends(get_db)
+):
+    """Retrieve the average number of wins per weight class.
+
+    Args:
+        request (Request): FastAPI request object.
+        db (AsyncSession): Active SQLAlchemy asynchronous session.
+
+    Returns:
+        TemplateResponse: Rendered HTML with the average wins grouped by weight class.
+    """
     results = await FighterGetter(db, IS_EXTENDED).get_grouped_stat(
         param_name1="weight_class",
         param_name2="wins",
@@ -40,7 +62,18 @@ async def get_avg_wins_per_weight_class(request: Request, db: AsyncSession = Dep
 
 
 @extended_weightclass_router.get("/loss", status_code=status.HTTP_200_OK)
-async def get_avg_loss_per_weight_class(request: Request, db: AsyncSession = Depends(get_db)):
+async def get_avg_loss_per_weight_class(
+    request: Request, db: AsyncSession = Depends(get_db)
+):
+    """Retrieve the average number of losses per weight class.
+
+    Args:
+        request (Request): FastAPI request object.
+        db (AsyncSession): Active SQLAlchemy asynchronous session.
+
+    Returns:
+        TemplateResponse: Rendered HTML with the average losses grouped by weight class.
+    """
     results = await FighterGetter(db, IS_EXTENDED).get_grouped_stat(
         param_name1="weight_class",
         param_name2="loss",

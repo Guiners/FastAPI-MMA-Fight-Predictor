@@ -19,8 +19,18 @@ IS_EXTENDED = True
 )
 async def get_extended_fighter_by_id(
     request: Request, fighter_id: int, db: AsyncSession = Depends(get_db)
-):
-    fighter = await FighterGetter(db, True).get_fighter_by_id(fighter_id)
+) -> HTMLResponse:
+    """Retrieve an extended fighter by ID.
+
+    Args:
+        request (Request): FastAPI request object.
+        fighter_id (int): Unique identifier of the fighter.
+        db (AsyncSession): Active SQLAlchemy database session.
+
+    Returns:
+        HTMLResponse: Rendered HTML template with the fighter’s data.
+    """
+    fighter = await FighterGetter(db, IS_EXTENDED).get_fighter_by_id(fighter_id)
     return templates.TemplateResponse(
         "fighter_list.html", {"request": request, "fighters": fighter}
     )
@@ -33,10 +43,31 @@ async def update_extended_fighter_by_id(
     fighter_data: ExtendedFighterFilter,
     db: AsyncSession = Depends(get_db),
 ):
-    return await FighterUpdater(db, True).update_fighter_by_id(fighter_id, fighter_data)
+    """Update extended fighter data by ID.
+
+    Args:
+        fighter_id (int): Fighter’s unique identifier.
+        fighter_data (ExtendedFighterFilter): Updated fighter attributes.
+        db (AsyncSession): Active SQLAlchemy database session.
+
+    Returns:
+        dict: Confirmation message or updated fighter data.
+    """
+    return await FighterUpdater(db, IS_EXTENDED).update_fighter_by_id(
+        fighter_id, fighter_data
+    )
 
 
 @extended_id_router.delete("/{fighter_id}", status_code=status.HTTP_200_OK)
 @handle_empty_response
 async def delete_extended_fighter(fighter_id: int, db: AsyncSession = Depends(get_db)):
-    return await FighterUpdater(db, True).remove_record_by_fighter_id(fighter_id)
+    """Delete an extended fighter by ID.
+
+    Args:
+        fighter_id (int): Fighter’s unique identifier.
+        db (AsyncSession): Active SQLAlchemy database session.
+
+    Returns:
+        dict: Confirmation of successful deletion.
+    """
+    return await FighterUpdater(db, IS_EXTENDED).remove_record_by_fighter_id(fighter_id)
