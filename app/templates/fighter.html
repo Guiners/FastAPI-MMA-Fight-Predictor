@@ -1,0 +1,70 @@
+<head>
+    <title>{{ fighter.name }} {{ fighter.nickname }} {{ fighter.surname }}</title>
+</head>
+
+<div class="fighter-profile">
+    <header class="fighter-header">
+        <h2>{{ fighter.name }} "{{ fighter.nickname }}" {{ fighter.surname }}</h2>
+        <p class="country">{{ fighter.country }}</p>
+        <p class="weight-class">Weight class: {{ fighter.weight_class }}</p>
+    </header>
+
+    <section class="fighter-summary">
+        <h3>Record</h3>
+        <div class="record">
+            <span>{{ fighter.wins }} wins</span>
+            <span>{{ fighter.loss }} losses</span>
+            <span>{{ fighter.draw }} draws</span>
+        </div>
+        <p>Current streak: {{ fighter.current_streak }}</p>
+        <p>Last fight: {{ fighter.last_fight_date }}</p>
+    </section>
+
+    {% if fighter.base_stats %}
+    <section class="fighter-section">
+        <h3>Base Statistics</h3>
+        <table>
+            <tr><th>Weight</th><td>{{ fighter.base_stats.weight }} kg</td></tr>
+            <tr><th>Height</th><td>{{ fighter.base_stats.height }} cm</td></tr>
+            <tr><th>Reach</th><td>{{ fighter.base_stats.reach }} cm</td></tr>
+            <tr><th>Age</th><td>{{ fighter.base_stats.age }}</td></tr>
+        </table>
+    </section>
+    {% endif %}
+
+    {% if fighter.extended_stats %}
+    <section class="fighter-section">
+        <h3>Extended Statistics</h3>
+        <table>
+            <tr><th>Stance</th><td>{{ fighter.extended_stats.stance }}</td></tr>
+            <tr><th>SLpM</th><td>{{ fighter.extended_stats.slpm }}</td></tr>
+            <tr><th>Striking Accuracy</th><td>{{ fighter.extended_stats.str_acc }}%</td></tr>
+            <tr><th>SApM</th><td>{{ fighter.extended_stats.sapm }}</td></tr>
+            <tr><th>Striking Defense</th><td>{{ fighter.extended_stats.str_def }}%</td></tr>
+            <tr><th>TD Avg</th><td>{{ fighter.extended_stats.td_avg }}</td></tr>
+            <tr><th>TD Accuracy</th><td>{{ fighter.extended_stats.td_acc }}%</td></tr>
+            <tr><th>TD Defense</th><td>{{ fighter.extended_stats.td_def }}%</td></tr>
+            <tr><th>Sub Avg</th><td>{{ fighter.extended_stats.sub_avg }}</td></tr>
+        </table>
+    </section>
+    {% endif %}
+
+    {% if fighter.fights_results %}
+    <section class="fighter-section">
+        <h3>Fight Results</h3>
+        <table>
+            <tr><th>Wins by KO/TKO</th><td>{{ fighter.fights_results.win_by_ko_tko }}</td></tr>
+            <tr><th>Losses by KO/TKO</th><td>{{ fighter.fights_results.loss_by_ko_tko }}</td></tr>
+            <tr><th>Wins by Submission</th><td>{{ fighter.fights_results.win_by_sub }}</td></tr>
+            <tr><th>Losses by Submission</th><td>{{ fighter.fights_results.loss_by_sub }}</td></tr>
+            <tr><th>Wins by Decision</th><td>{{ fighter.fights_results.win_by_dec }}</td></tr>
+            <tr><th>Losses by Decision</th><td>{{ fighter.fights_results.loss_by_dec }}</td></tr>
+            <tr><th>Non-contests</th><td>{{ fighter.fights_results.non_contest }}</td></tr>
+        </table>
+    </section>
+    {% endif %}
+
+    <footer>
+        <p>Last updated: {{ fighter.last_updated }}</p>
+    </footer>
+</div>

@@ -1,40 +1,65 @@
+import typing
 from functools import wraps
-from typing import Any, Optional, get_origin
 
-from pydantic import create_model
+from pydantic import BaseModel, create_model
 
 from app.tools.exceptions.custom_api_exceptions import NotFoundException
 from app.tools.logger import logger
 
 
-def handle_empty_response(func):
-    @wraps(func)
-    async def wrapper(*args, **kwargs):
+def handle_empty_response(
+    func: typing.Callable[..., typing.Awaitable[typing.Any]]
+) -> typing.Callable[..., typing.Awaitable[typing.Any]]:
+    """
+    Decorator that ensures async DB/service functions don't return empty responses.
 
+    If the wrapped function returns an empty iterable, `None`, or an unexpected value,
+    this decorator logs the issue and raises a `NotFoundException`.
+    """
+
+    @wraps(func)
+    async def wrapper(*args, **kwargs) -> typing.Any:
         try:
             response = await func(*args, **kwargs)
 
-            if type(response) in (int, bool):
-                pass
+            # Allow integers/bools (e.g., affected row counts, success flags)
+            if isinstance(response, (int, bool)):
+                return response
 
-            elif not response or None in response or response == []:
-                logger.error("Fighter/Fighters not found")
+            # Detect empty/invalid results
+            if (
+                response is None
+                or response == []
+                or (isinstance(response, (list, tuple, set, dict)) and not response)
+                or (
+                    isinstance(response, (list, tuple))
+                    and any(item is None for item in response)
+                )
+            ):
+                logger.error("Fighter/Fighters not found or response empty")
                 raise NotFoundException
+
             return response
 
         except Exception as e:
-            logger.error(e)
+            logger.error(f"Error in {func.__name__}: {e}")
             raise NotFoundException from e
 
     return wrapper
 
 
-def create_filter_schema(schema):
+def create_filter_schema(schema: typing.Type[BaseModel]) -> typing.Type[BaseModel]:
+    """
+    Dynamically creates a Pydantic filter model from another model class.
+
+    All fields except 'fighter_id' and 'last_updated' become optional,
+    allowing flexible query filters for search endpoints.
+    """
     return create_model(
         f"{schema.__name__}Filter",
         **{
-            field: (Optional[typ.annotation], None)
-            for field, typ in schema.model_fields.items()
+            field: (typing.Optional[field_info.annotation], None)
+            for field, field_info in schema.model_fields.items()
             if field not in ("fighter_id", "last_updated")
         },
     )

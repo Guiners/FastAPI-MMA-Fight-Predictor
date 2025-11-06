@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title | clean_str }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='css/fighter.css') }}">
+</head>
+<body>
+
+    <div class="fighter-profile">
+        <section class="fighter-section">
+            <h1> {{ title | clean_str }} </h1>
+            <table>
+                {% for key, value in result.items() %}
+                    <tr><th> {{ key | clean_str }} </th><td> {{ value | clean_str }} </td></tr>
+                {% endfor %}
+            </table>
+        </section>
+
+    </div>
+
+</body>
+</html>
